@@ -1,85 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>English Diary</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>English Diary</h1>
+<div class="container">
 
-<!-- ===== Calendar ===== -->
-<div id="calendarPage">
+    <h1>English Diary</h1>
 
-<div class="calendar-header">
-  <button class="nav-btn" onclick="prevMonth()">←</button>
-  <div class="calendar-title" id="monthTitle"></div>
-  <button class="nav-btn" onclick="nextMonth()">→</button>
-</div>
+    <!-- 月移動 -->
+    <div class="calendar-nav">
+        <button id="prevMonth">←</button>
+        <span id="monthLabel"></span>
+        <button id="nextMonth">→</button>
+    </div>
 
-<div id="weekdayHeader"></div>
-<div id="calendar"></div>
+    <!-- カレンダー -->
+    <div id="calendar"></div>
 
-<br>
-<button class="nav-btn" onclick="openAnalyze()">Analyze</button>
+    <!-- 日記入力 -->
+    <div class="diary-card">
+        <textarea id="diaryInput" placeholder="Write your diary..."></textarea>
 
-</div>
+        <div class="button-area">
+            <button id="saveBtn">Save</button>
+            <button id="analyzeBtn">Analyze</button>
+        </div>
 
-
-<!-- ===== Diary ===== -->
-<div id="diaryPage" style="display:none">
-
-<div class="diary-card">
-
-<h2 id="selectedDate"></h2>
-
-<label class="label">Today's Mood</label>
-<select id="moodSelect" class="mood-select">
-<option value="happy">😊 Happy</option>
-<option value="sad">😢 Sad</option>
-<option value="excited">🤩 Excited</option>
-<option value="tired">😴 Tired</option>
-<option value="angry">😡 Angry</option>
-<option value="calm">😌 Calm</option>
-</select>
-
-<label class="label">Your English Diary</label>
-<textarea id="diaryText" placeholder="Write your diary in English..."></textarea>
-
-<div class="char-wrapper">
-  <div id="charBar"></div>
-</div>
-
-<p id="charCount">0 / 50</p>
-
-<div class="diary-buttons">
-<button class="nav-btn save-btn" onclick="saveDiary()">Save</button>
-<button class="nav-btn" onclick="backToCalendar()">Back</button>
-</div>
-
-</div>
-
-</div>
-
-
-<!-- ===== Analyze ===== -->
-<div id="analyzePage" style="display:none">
-
-<h2>Word Analyze</h2>
-
-<div id="wordList"></div>
-
-<hr>
-
-<div id="dateList"></div>
-
-<button class="nav-btn" onclick="backToCalendar()">Back</button>
+        <div id="result"></div>
+    </div>
 
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
