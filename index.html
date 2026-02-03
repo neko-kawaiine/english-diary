@@ -9,31 +9,36 @@
 
 <body>
 
-<div class="container">
+<div class="app">
 
+<header class="header">
     <h1>English Diary</h1>
 
-    <!-- 月移動 -->
-    <div class="calendar-nav">
+    <div class="month-nav">
         <button id="prevMonth">←</button>
-        <span id="monthLabel"></span>
+        <div id="monthLabel"></div>
         <button id="nextMonth">→</button>
     </div>
+</header>
 
-    <!-- カレンダー -->
+<main>
+
+<section id="calendarView">
     <div id="calendar"></div>
+</section>
 
-    <!-- 日記入力 -->
-    <div class="diary-card">
-        <textarea id="diaryInput" placeholder="Write your diary..."></textarea>
+<section id="diaryView">
+    <textarea id="diaryInput" placeholder="Write your diary in English..."></textarea>
 
-        <div class="button-area">
-            <button id="saveBtn">Save</button>
-            <button id="analyzeBtn">Analyze</button>
-        </div>
-
-        <div id="result"></div>
+    <div class="actions">
+        <button id="saveBtn">Save</button>
+        <button id="analyzeBtn">Analyze</button>
     </div>
+
+    <div id="result"></div>
+</section>
+
+</main>
 
 </div>
 
