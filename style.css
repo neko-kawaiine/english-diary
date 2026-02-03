@@ -36,22 +36,22 @@ h1,h2,h3{text-align:center;}
   background:#2980b9;
 }
 
-/* ⭐ カレンダー本体（曜日と日付を完全同期） */
+/* ⭐ カレンダー */
 #weekdayHeader,
 #calendar{
   display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:0;
+  grid-template-columns:repeat(7,60px);
+  justify-content:center;
 }
 
-/* ⭐ 曜日と日付のセルを完全統一 */
+/* ⭐ セルサイズ完全固定 */
 #weekdayHeader div,
 #calendar div{
+  width:60px;
+  height:60px;
   display:flex;
   justify-content:center;
   align-items:center;
-  height:40px;
-  text-align:center;
 }
 
 /* 曜日 */
@@ -61,15 +61,22 @@ h1,h2,h3{text-align:center;}
 
 /* ⭐ 日付セル */
 #calendar div{
-  border:1px solid #ccc;
-  border-radius:50%;
   cursor:pointer;
-  font-size:0.9rem;
-  aspect-ratio:1/1; /* ← 丸を維持しつつズレ防止 */
+}
+
+/* ⭐ 丸は中に作る */
+#calendar div span{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  border:1px solid #ccc;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   background:white;
 }
 
-#calendar div.today{
+#calendar div.today span{
   border:2px solid #e74c3c;
 }
 
