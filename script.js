@@ -126,8 +126,12 @@ function saveDiary(){
 diaryText.addEventListener("input",updateCharCount);
 
 function updateCharCount(){
+
   const count=diaryText.value.length;
   document.getElementById("charCount").textContent=`${count} / 50`;
+
+  const percent=Math.min((count/50)*100,100);
+  document.getElementById("charBar").style.width=percent+"%";
 
   document.body.style.background=
     count>=50 ? "#eafaf1" : "#f7f7f7";
