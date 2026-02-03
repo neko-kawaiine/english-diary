@@ -1,37 +1,38 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #2c3e50;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(to right, #fbc2eb, #a6c1ee);
     margin: 0;
-    padding: 20px;
+    padding: 0;
 }
 
 .container {
     max-width: 700px;
-    margin: auto;
+    margin: 40px auto;
+    text-align: center;
 }
 
 /* タイトル */
 h1 {
-    text-align: center;
+    color: white;
     margin-bottom: 20px;
 }
 
-/* 月移動（前の配置のまま） */
+/* 月移動（ここ修正） */
 .calendar-nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* ←中央寄せ */
     align-items: center;
+    gap: 20px; /* ←均等間隔 */
     margin-bottom: 15px;
 }
 
 .calendar-nav button {
-    padding: 6px 12px;
+    padding: 8px 14px;
     border: none;
-    border-radius: 6px;
-    background: #3498db;
-    color: white;
+    border-radius: 8px;
+    background: white;
     cursor: pointer;
+    font-size: 16px;
 }
 
 /* カレンダー */
@@ -39,62 +40,66 @@ h1 {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .day {
     background: white;
-    padding: 14px 0;
-    border-radius: 8px;
+    padding: 15px 0;
+    border-radius: 10px;
     cursor: pointer;
-    border: 1px solid #ddd;
+    transition: 0.2s;
 }
 
 .day:hover {
-    background: #ecf5ff;
+    background: #ffe1f0;
 }
 
 /* 日記カード */
 .diary-card {
     background: white;
-    padding: 18px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 
-/* 入力 */
+/* テキストエリア */
 textarea {
     width: 100%;
     height: 150px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    padding: 8px;
-    font-size: 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
 }
 
-/* ボタンエリア */
+/* ボタンエリア（ここも修正） */
 .button-area {
     display: flex;
-    gap: 10px;
+    justify-content: center; /* ←中央寄せ */
+    gap: 15px;
     margin-top: 15px;
 }
 
 /* ボタン */
 button {
-    padding: 8px 16px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 6px;
-    background: #3498db;
-    color: white;
+    border-radius: 10px;
     cursor: pointer;
+    background: #ff8ac6;
+    color: white;
+    font-size: 15px;
+    transition: 0.2s;
 }
 
 button:hover {
-    background: #2980b9;
+    background: #ff5ca8;
 }
 
 /* 結果 */
 #result {
-    margin-top: 12px;
+    margin-top: 15px;
     font-weight: bold;
 }
