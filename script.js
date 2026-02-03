@@ -1,6 +1,6 @@
-let date=new Date();
-let y=date.getFullYear();
-let m=date.getMonth();
+let now=new Date();
+let year=now.getFullYear();
+let month=now.getMonth();
 let selected=null;
 
 const weekdays=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -12,20 +12,25 @@ document.getElementById(id).classList.add("hidden");
 document.getElementById("screen"+n).classList.remove("hidden");
 }
 
+/* calendar */
+
 function drawCalendar(){
+
 const grid=document.getElementById("calendarGrid");
 grid.innerHTML="";
 
-document.getElementById("monthTitle").textContent=`${y}/${m+1}`;
+monthTitle.textContent=`${year}/${month+1}`;
 
+/* weekday */
 weekdays.forEach(d=>{
 let div=document.createElement("div");
 div.textContent=d;
+div.classList.add("weekday");
 grid.appendChild(div);
 });
 
-let first=new Date(y,m,1).getDay();
-let last=new Date(y,m+1,0).getDate();
+let first=new Date(year,month,1).getDay();
+let last=new Date(year,month+1,0).getDate();
 
 for(let i=0;i<first;i++) grid.appendChild(document.createElement("div"));
 
@@ -37,14 +42,14 @@ div.classList.add("date");
 let span=document.createElement("span");
 span.textContent=d;
 
-let key=`${y}-${m+1}-${d}`;
+let key=`${year}-${month+1}-${d}`;
 let data=JSON.parse(localStorage.getItem(key));
 
 if(data?.mood) div.classList.add(data.mood);
 
 div.onclick=()=>{
 selected=key;
-document.getElementById("selectedDate").textContent=key;
+selectedDate.textContent=key;
 loadDiary();
 showScreen(2);
 };
@@ -54,8 +59,10 @@ grid.appendChild(div);
 }
 }
 
+/* diary */
+
 function loadDiary(){
-let data=JSON.parse(localStorage.getItem(selected)) || {};
+let data=JSON.parse(localStorage.getItem(selected))||{};
 diaryText.value=data.text||"";
 mood.value=data.mood||"";
 updateCount();
@@ -65,8 +72,9 @@ function saveDiary(){
 
 let text=diaryText.value;
 
+/* English only */
 if(/[ぁ-んァ-ン一-龥]/.test(text)){
-alert("English only!");
+alert("Please write in English only");
 return;
 }
 
@@ -83,13 +91,32 @@ function backCalendar(){
 showScreen(1);
 }
 
-/* ⭐ Analyze */
-function openDictionary(){
+/* character count */
+
+diaryText.addEventListener("input",updateCount);
+
+function updateCount(){
+
+let n=diaryText.value.length;
+charCount.textContent=`${n} / 50`;
+
+if(n>=50){
+screen2.classList.add("goal");
+}else{
+screen2.classList.remove("goal");
+}
+}
+
+/* analyze */
+
+function openAnalyze(){
 
 let words={};
 
 for(let i=0;i<localStorage.length;i++){
+
 let data=JSON.parse(localStorage.getItem(localStorage.key(i)));
+
 if(!data?.text) continue;
 
 data.text.toLowerCase().split(/\W+/).forEach(w=>{
@@ -99,6 +126,7 @@ words[w]=(words[w]||0)+1;
 }
 
 let html="";
+
 Object.entries(words)
 .sort((a,b)=>b[1]-a[1])
 .forEach(([w,c])=>{
@@ -106,24 +134,22 @@ html+=`<div>${w} : ${c}</div>`;
 });
 
 dictionary.innerHTML=html;
+
 showScreen(3);
 }
 
-/* 文字数 */
-diaryText.addEventListener("input",updateCount);
+/* month move */
 
-function updateCount(){
-let n=diaryText.value.length;
-charCount.textContent=`${n} / 50`;
-
-if(n>=50){
-screen2.style.background="#e8ffe8";
-}else{
-screen2.style.background="white";
-}
+function prevMonth(){
+month--;
+if(month<0){month=11;year--;}
+drawCalendar();
 }
 
-function prevMonth(){m--; if(m<0){m=11;y--;} drawCalendar();}
-function nextMonth(){m++; if(m>11){m=0;y++;} drawCalendar();}
+function nextMonth(){
+month++;
+if(month>11){month=0;year++;}
+drawCalendar();
+}
 
 drawCalendar();
