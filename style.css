@@ -17,25 +17,46 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* 月移動（ここ修正） */
+/* ===== 月ナビ ===== */
 .calendar-nav {
+    position: relative;
+    width: 100%;
     display: flex;
-    justify-content: center; /* ←中央寄せ */
+    justify-content: center;
     align-items: center;
-    gap: 20px; /* ←均等間隔 */
     margin-bottom: 15px;
 }
 
+/* 月タイトル */
+#monthLabel {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+/* 矢印 */
 .calendar-nav button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     padding: 8px 14px;
     border: none;
     border-radius: 8px;
     background: white;
     cursor: pointer;
     font-size: 16px;
+    transition: 0.2s;
 }
 
-/* カレンダー */
+.calendar-nav button:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* 左右配置 */
+#prevMonth { left: 0; }
+#nextMonth { right: 0; }
+
+/* ===== カレンダー ===== */
 #calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -55,7 +76,7 @@ h1 {
     background: #ffe1f0;
 }
 
-/* 日記カード */
+/* ===== 日記カード ===== */
 .diary-card {
     background: white;
     padding: 20px;
@@ -63,7 +84,7 @@ h1 {
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 
-/* テキストエリア */
+/* テキスト */
 textarea {
     width: 100%;
     height: 150px;
@@ -74,10 +95,10 @@ textarea {
     resize: none;
 }
 
-/* ボタンエリア（ここも修正） */
+/* ボタンエリア */
 .button-area {
     display: flex;
-    justify-content: center; /* ←中央寄せ */
+    justify-content: center;
     gap: 15px;
     margin-top: 15px;
 }
