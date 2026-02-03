@@ -1,116 +1,126 @@
-body {
-    font-family: "Segoe UI", system-ui, sans-serif;
-    background: #f5f6f8;
-    color: #2d2d2d;
-    margin: 0;
-    padding: 20px;
+/* ===== 全体 ===== */
+
+body{
+    margin:0;
+    font-family: system-ui, -apple-system, sans-serif;
+    background:#f4f5f7;
+    color:#222;
 }
 
-.container {
-    max-width: 720px;
-    margin: auto;
+.app{
+    max-width:720px;
+    margin:auto;
+    padding:20px;
 }
 
-/* タイトル */
-h1 {
-    text-align: center;
-    font-weight: 600;
-    margin-bottom: 25px;
-    letter-spacing: 1px;
+/* ===== ヘッダー ===== */
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
 }
 
-/* 月ナビ（配置そのまま） */
-.calendar-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+h1{
+    font-weight:600;
+    margin-bottom:15px;
 }
 
-.calendar-nav button {
-    background: #2f3e4d;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
+/* ===== 月ナビ ===== */
+
+.month-nav{
+    display:grid;
+    grid-template-columns:60px 1fr 60px;
+    align-items:center;
 }
 
-.calendar-nav button:hover {
-    background: #1f2a36;
+#monthLabel{
+    text-align:center;
+    font-weight:600;
+    font-size:18px;
 }
 
-/* カレンダー */
-#calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-bottom: 25px;
+.month-nav button{
+    border:none;
+    background:#2f3e4d;
+    color:white;
+    padding:6px;
+    border-radius:6px;
+    cursor:pointer;
 }
 
-.day {
-    background: white;
-    border-radius: 6px;
-    padding: 14px 0;
-    border: 1px solid #e4e6ea;
-    cursor: pointer;
-    transition: 0.15s;
+.month-nav button:hover{
+    background:#1e2a33;
 }
 
-.day:hover {
-    border-color: #2f3e4d;
-    transform: translateY(-2px);
+/* ===== カレンダー ===== */
+
+#calendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:8px;
+    margin-bottom:25px;
 }
 
-/* 日記カード */
-.diary-card {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #e4e6ea;
+.day{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:14px 0;
+    text-align:center;
+    cursor:pointer;
+    transition:.15s;
 }
 
-/* 入力欄 */
-textarea {
-    width: 100%;
-    height: 150px;
-    border-radius: 6px;
-    border: 1px solid #d8dbe0;
-    padding: 10px;
-    font-size: 15px;
-    resize: none;
+.day:hover{
+    border-color:#2f3e4d;
 }
 
-textarea:focus {
-    outline: none;
-    border-color: #2f3e4d;
+/* ===== 日記 ===== */
+
+#diaryView{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:8px;
+    padding:20px;
 }
 
-/* ボタンエリア */
-.button-area {
-    display: flex;
-    gap: 12px;
-    margin-top: 15px;
+textarea{
+    width:100%;
+    height:160px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    padding:10px;
+    font-size:15px;
+    resize:none;
 }
 
-/* 共通ボタン */
-button {
-    background: #2f3e4d;
-    color: white;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
+textarea:focus{
+    outline:none;
+    border-color:#2f3e4d;
 }
 
-button:hover {
-    background: #1f2a36;
+/* ===== ボタン ===== */
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
 }
 
-/* 結果 */
-#result {
-    margin-top: 14px;
-    font-weight: 500;
+.actions button{
+    border:none;
+    background:#2f3e4d;
+    color:white;
+    padding:8px 18px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.actions button:hover{
+    background:#1e2a33;
+}
+
+#result{
+    margin-top:12px;
+    font-weight:500;
 }
