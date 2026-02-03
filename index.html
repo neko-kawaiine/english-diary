@@ -10,21 +10,49 @@
 
 <h1>English Diary</h1>
 
+<!-- ⭐ screen1 カレンダー -->
+<div id="screen1">
+
 <div class="calendar-header">
-  <button class="nav-btn" onclick="prevMonth()">←</button>
-  <div class="calendar-title" id="monthTitle"></div>
-  <button class="nav-btn" onclick="nextMonth()">→</button>
+<button onclick="prevMonth()">←</button>
+<div id="monthTitle"></div>
+<button onclick="nextMonth()">→</button>
 </div>
 
 <div id="calendarGrid"></div>
+</div>
+
+<!-- ⭐ screen2 日記 -->
+<div id="screen2" class="hidden">
 
 <h2 id="selectedDate"></h2>
 
-<textarea id="diaryText" placeholder="Write your diary in English..."></textarea>
-<br>
-<button class="nav-btn" onclick="saveDiary()">Save</button>
+<select id="mood">
+<option value="">Select Mood</option>
+<option value="happy">Happy</option>
+<option value="normal">Normal</option>
+<option value="sad">Sad</option>
+<option value="angry">Angry</option>
+<option value="tired">Tired</option>
+<option value="excited">Excited</option>
+</select>
+
+<textarea id="diaryText"></textarea>
+
+<p id="charCount">0 / 50</p>
+
+<button onclick="saveDiary()">Save</button>
+<button onclick="backCalendar()">Back</button>
+
+</div>
+
+<!-- ⭐ screen3 辞書 -->
+<div id="screen3" class="hidden">
+<h2>Word Dictionary</h2>
+<div id="dictionary"></div>
+<button onclick="backCalendar()">Back</button>
+</div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
