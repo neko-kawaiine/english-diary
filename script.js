@@ -1,10 +1,10 @@
-const calendar = document.getElementById("calendar");
-const weekdayHeader = document.getElementById("weekdayHeader");
-const monthTitle = document.getElementById("monthTitle");
-const diaryText = document.getElementById("diaryText");
+const calendar=document.getElementById("calendar");
+const weekdayHeader=document.getElementById("weekdayHeader");
+const monthTitle=document.getElementById("monthTitle");
+const diaryText=document.getElementById("diaryText");
 
-let currentDate = new Date();
-let selectedDateKey = "";
+let currentDate=new Date();
+let selectedDateKey="";
 
 /* ===== Calendar ===== */
 
@@ -34,7 +34,7 @@ function renderCalendar(){
     calendar.appendChild(document.createElement("div"));
   }
 
-  for(let d=1; d<=lastDate; d++){
+  for(let d=1;d<=lastDate;d++){
 
     const dateKey=`${year}-${month+1}-${d}`;
 
@@ -56,14 +56,14 @@ function renderCalendar(){
 }
 
 function getMoodColor(mood){
-  return {
-    happy:"#f1c40f",
-    sad:"#3498db",
-    excited:"#e67e22",
-    tired:"#95a5a6",
-    angry:"#e74c3c",
-    calm:"#2ecc71"
-  }[mood] || "white";
+  return{
+    happy:"#ffeaa7",
+    sad:"#74b9ff",
+    excited:"#fab1a0",
+    tired:"#b2bec3",
+    angry:"#ff7675",
+    calm:"#55efc4"
+  }[mood];
 }
 
 function prevMonth(){
@@ -101,11 +101,9 @@ function openDiary(key){
 }
 
 function backToCalendar(){
-
   document.getElementById("calendarPage").style.display="block";
   document.getElementById("diaryPage").style.display="none";
   document.getElementById("analyzePage").style.display="none";
-
   renderCalendar();
 }
 
@@ -122,7 +120,6 @@ function saveDiary(){
   };
 
   localStorage.setItem(selectedDateKey,JSON.stringify(data));
-
   alert("Saved!");
 }
 
@@ -132,11 +129,8 @@ function updateCharCount(){
   const count=diaryText.value.length;
   document.getElementById("charCount").textContent=`${count} / 50`;
 
-  if(count>=50){
-    document.body.style.background="#d5f5e3";
-  }else{
-    document.body.style.background="#f0f4f8";
-  }
+  document.body.style.background=
+    count>=50 ? "#eafaf1" : "#f7f7f7";
 }
 
 /* ===== Analyze ===== */
@@ -193,9 +187,7 @@ function showDates(word,dates){
   dates.forEach(date=>{
     const btn=document.createElement("button");
     btn.textContent=date;
-
     btn.onclick=()=>openDiary("diary_"+date);
-
     container.appendChild(btn);
   });
 }
