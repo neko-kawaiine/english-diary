@@ -1,38 +1,44 @@
 body {
-    font-family: "Segoe UI", sans-serif;
-    background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: #f5f6f8;
+    color: #2d2d2d;
     margin: 0;
-    padding: 0;
+    padding: 20px;
 }
 
 .container {
-    max-width: 700px;
-    margin: 40px auto;
-    text-align: center;
+    max-width: 720px;
+    margin: auto;
 }
 
 /* タイトル */
 h1 {
-    color: white;
-    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
 }
 
-/* 月移動（ここ修正） */
+/* 月ナビ（配置そのまま） */
 .calendar-nav {
     display: flex;
-    justify-content: center; /* ←中央寄せ */
+    justify-content: space-between;
     align-items: center;
-    gap: 20px; /* ←均等間隔 */
     margin-bottom: 15px;
 }
 
 .calendar-nav button {
-    padding: 8px 14px;
+    background: #2f3e4d;
+    color: white;
     border: none;
-    border-radius: 8px;
-    background: white;
+    padding: 6px 14px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
+    transition: 0.2s;
+}
+
+.calendar-nav button:hover {
+    background: #1f2a36;
 }
 
 /* カレンダー */
@@ -45,61 +51,66 @@ h1 {
 
 .day {
     background: white;
-    padding: 15px 0;
-    border-radius: 10px;
+    border-radius: 6px;
+    padding: 14px 0;
+    border: 1px solid #e4e6ea;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.15s;
 }
 
 .day:hover {
-    background: #ffe1f0;
+    border-color: #2f3e4d;
+    transform: translateY(-2px);
 }
 
 /* 日記カード */
 .diary-card {
     background: white;
     padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    border: 1px solid #e4e6ea;
 }
 
-/* テキストエリア */
+/* 入力欄 */
 textarea {
     width: 100%;
     height: 150px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
+    border-radius: 6px;
+    border: 1px solid #d8dbe0;
     padding: 10px;
-    font-size: 16px;
+    font-size: 15px;
     resize: none;
 }
 
-/* ボタンエリア（ここも修正） */
+textarea:focus {
+    outline: none;
+    border-color: #2f3e4d;
+}
+
+/* ボタンエリア */
 .button-area {
     display: flex;
-    justify-content: center; /* ←中央寄せ */
-    gap: 15px;
+    gap: 12px;
     margin-top: 15px;
 }
 
-/* ボタン */
+/* 共通ボタン */
 button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #ff8ac6;
+    background: #2f3e4d;
     color: white;
-    font-size: 15px;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
     transition: 0.2s;
 }
 
 button:hover {
-    background: #ff5ca8;
+    background: #1f2a36;
 }
 
 /* 結果 */
 #result {
-    margin-top: 15px;
-    font-weight: bold;
+    margin-top: 14px;
+    font-weight: 500;
 }
