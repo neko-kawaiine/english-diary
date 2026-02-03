@@ -12,24 +12,25 @@
 
 <h1>English Diary</h1>
 
-<!-- ⭐ screen1 -->
+<!-- ⭐ Calendar -->
 <div id="screen1" class="card">
 
-<div class="top-bar">
+<div class="topbar">
 <button onclick="prevMonth()">←</button>
-<div id="monthTitle"></div>
+<h2 id="monthTitle"></h2>
 <button onclick="nextMonth()">→</button>
 </div>
 
 <div id="calendarGrid"></div>
 
 <div class="menu">
-<button onclick="openDictionary()">Analyze</button>
+<button onclick="openAnalyze()">Analyze</button>
 </div>
 
 </div>
 
-<!-- ⭐ screen2 -->
+
+<!-- ⭐ Diary -->
 <div id="screen2" class="card hidden">
 
 <h2 id="selectedDate"></h2>
@@ -46,7 +47,7 @@
 
 <textarea id="diaryText"></textarea>
 
-<p id="charCount"></p>
+<p id="charCount">0 / 50</p>
 
 <div class="menu">
 <button onclick="saveDiary()">Save</button>
@@ -55,7 +56,8 @@
 
 </div>
 
-<!-- ⭐ screen3 Analyze -->
+
+<!-- ⭐ Analyze -->
 <div id="screen3" class="card hidden">
 
 <h2>Word Analyze</h2>
@@ -71,5 +73,6 @@
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
