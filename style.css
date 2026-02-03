@@ -36,7 +36,8 @@ h1,h2,h3{text-align:center;}
   background:#2980b9;
 }
 
-/* ⭐ カレンダー */
+/* ===== Calendar ===== */
+
 #weekdayHeader,
 #calendar{
   display:grid;
@@ -44,7 +45,6 @@ h1,h2,h3{text-align:center;}
   justify-content:center;
 }
 
-/* ⭐ セルサイズ固定 */
 #weekdayHeader div,
 #calendar div{
   width:60px;
@@ -54,12 +54,10 @@ h1,h2,h3{text-align:center;}
   align-items:center;
 }
 
-/* 曜日 */
 #weekdayHeader div{
   font-weight:bold;
 }
 
-/* ⭐ 日付丸 */
 #calendar span{
   width:45px;
   height:45px;
@@ -72,23 +70,75 @@ h1,h2,h3{text-align:center;}
   cursor:pointer;
 }
 
-/* 今日 */
-.today span{
-  border:2px solid #e74c3c;
+/* ===== Diary Card ===== */
+
+.diary-card{
+  max-width:420px;
+  margin:30px auto;
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* 日記入力 */
+.label{
+  display:block;
+  text-align:left;
+  margin-top:15px;
+  font-weight:bold;
+}
+
+.mood-select{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  margin-top:5px;
+}
+
 #diaryText{
   width:100%;
   min-height:150px;
-  margin-top:10px;
-  padding:8px;
+  margin-top:8px;
+  padding:10px;
   font-size:1rem;
-  border-radius:5px;
+  border-radius:10px;
   border:1px solid #ccc;
+  resize:none;
 }
 
-/* Analyze */
+.char-wrapper{
+  width:100%;
+  height:8px;
+  background:#eee;
+  border-radius:10px;
+  margin-top:10px;
+  overflow:hidden;
+}
+
+#charBar{
+  height:100%;
+  width:0%;
+  background:#3498db;
+  transition:0.3s;
+}
+
+.diary-buttons{
+  display:flex;
+  justify-content:space-between;
+  margin-top:15px;
+}
+
+.save-btn{
+  background:#27ae60;
+}
+
+.save-btn:hover{
+  background:#1e8449;
+}
+
+/* ===== Analyze ===== */
+
 .wordItem{
   padding:5px;
   cursor:pointer;
