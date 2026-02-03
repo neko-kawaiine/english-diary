@@ -1,25 +1,42 @@
+*{box-sizing:border-box;}
+
 body{
-  font-family:Arial;
-  background:#f0f4f8;
-  text-align:center;
+  font-family:Arial, sans-serif;
+  background:#f7f7f7;
+  color:#2c3e50;
+  margin:0;
+  padding:20px;
 }
+
+h1,h2,h3{text-align:center;}
 
 .calendar-header{
   display:flex;
-  justify-content:center;
-  gap:20px;
+  justify-content:space-between;
+  align-items:center;
   margin-bottom:10px;
 }
 
-.nav-btn{
-  padding:8px 14px;
-  border:none;
-  border-radius:8px;
-  background:#3498db;
-  color:white;
-  cursor:pointer;
+.calendar-title{
+  font-size:1.7rem;
+  font-weight:bold;
 }
 
+.nav-btn{
+  padding:6px 12px;
+  border:none;
+  border-radius:5px;
+  background:#3498db;
+  color:#fff;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.nav-btn:hover{
+  background:#2980b9;
+}
+
+/* ⭐ カレンダー */
 #weekdayHeader,
 #calendar{
   display:grid;
@@ -27,6 +44,7 @@ body{
   justify-content:center;
 }
 
+/* ⭐ セルサイズ固定 */
 #weekdayHeader div,
 #calendar div{
   width:60px;
@@ -36,6 +54,12 @@ body{
   align-items:center;
 }
 
+/* 曜日 */
+#weekdayHeader div{
+  font-weight:bold;
+}
+
+/* ⭐ 日付丸 */
 #calendar span{
   width:45px;
   height:45px;
@@ -48,17 +72,28 @@ body{
   cursor:pointer;
 }
 
-textarea{
-  width:300px;
-  height:150px;
-  margin-top:10px;
+/* 今日 */
+.today span{
+  border:2px solid #e74c3c;
 }
 
+/* 日記入力 */
+#diaryText{
+  width:100%;
+  min-height:150px;
+  margin-top:10px;
+  padding:8px;
+  font-size:1rem;
+  border-radius:5px;
+  border:1px solid #ccc;
+}
+
+/* Analyze */
 .wordItem{
-  cursor:pointer;
   padding:5px;
+  cursor:pointer;
 }
 
 .wordItem:hover{
-  background:#ddd;
+  background:#eee;
 }
