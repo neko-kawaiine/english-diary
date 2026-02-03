@@ -1,90 +1,30 @@
-* { box-sizing: border-box; }
+.hidden{display:none;}
 
-body {
-  font-family: Arial, sans-serif;
-  background:#f7f7f7;
-  color:#2c3e50;
-  margin:0;
-  padding:20px;
-}
-
-h1,h2,h3{text-align:center;}
-
-.calendar-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-}
-
-.calendar-title{
-  font-size:1.7rem;
-  font-weight:bold;
-}
-
-.nav-btn{
-  padding:6px 12px;
-  border:none;
-  border-radius:5px;
-  background:#3498db;
-  color:#fff;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.nav-btn:hover{
-  background:#2980b9;
-}
-
-/* ⭐ カレンダー本体 */
 #calendarGrid{
-  display:grid;
-  grid-template-columns:repeat(7, 60px);
-  gap:5px;
-  justify-content:center;
-}
-
-/* ⭐ セル */
-#calendarGrid > div{
-  width:60px;
-  height:60px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-/* 曜日 */
-.weekday{
-  font-weight:bold;
-}
-
-/* 日付 */
-.date{
-  cursor:pointer;
+display:grid;
+grid-template-columns:repeat(7,60px);
+gap:5px;
 }
 
 .date span{
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  border:1px solid #ccc;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:white;
+width:45px;
+height:45px;
+border-radius:50%;
+border:1px solid gray;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-.today span{
-  border:2px solid #e74c3c;
-}
+/* 感情色 */
+.happy span{background:#ffd700;}
+.normal span{background:#ccc;}
+.sad span{background:#87cefa;}
+.angry span{background:#ff6b6b;}
+.tired span{background:#b19cd9;}
+.excited span{background:#7fff7f;}
 
-/* 日記 */
-#diaryText{
-  width:100%;
-  min-height:150px;
-  margin-top:10px;
-  padding:8px;
-  font-size:1rem;
-  border-radius:5px;
-  border:1px solid #ccc;
+/* 目標達成 */
+.goal{
+background:#d4ffd4;
 }
