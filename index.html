@@ -31,9 +31,12 @@
 <!-- ===== Diary ===== -->
 <div id="diaryPage" style="display:none">
 
+<div class="diary-card">
+
 <h2 id="selectedDate"></h2>
 
-<select id="moodSelect">
+<label class="label">Today's Mood</label>
+<select id="moodSelect" class="mood-select">
 <option value="happy">😊 Happy</option>
 <option value="sad">😢 Sad</option>
 <option value="excited">🤩 Excited</option>
@@ -42,12 +45,21 @@
 <option value="calm">😌 Calm</option>
 </select>
 
+<label class="label">Your English Diary</label>
 <textarea id="diaryText" placeholder="Write your diary in English..."></textarea>
+
+<div class="char-wrapper">
+  <div id="charBar"></div>
+</div>
 
 <p id="charCount">0 / 50</p>
 
-<button class="nav-btn" onclick="saveDiary()">Save</button>
+<div class="diary-buttons">
+<button class="nav-btn save-btn" onclick="saveDiary()">Save</button>
 <button class="nav-btn" onclick="backToCalendar()">Back</button>
+</div>
+
+</div>
 
 </div>
 
