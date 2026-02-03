@@ -1,126 +1,100 @@
 body {
-    font-family: "Segoe UI", sans-serif;
-    background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #2c3e50;
     margin: 0;
-    padding: 0;
+    padding: 20px;
 }
 
 .container {
     max-width: 700px;
-    margin: 40px auto;
-    text-align: center;
+    margin: auto;
 }
 
 /* タイトル */
 h1 {
-    color: white;
+    text-align: center;
     margin-bottom: 20px;
 }
 
-/* ===== 月ナビ ===== */
+/* 月移動（前の配置のまま） */
 .calendar-nav {
-    position: relative;
-    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
 }
 
-/* 月タイトル */
-#monthLabel {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-}
-
-/* 矢印 */
 .calendar-nav button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 8px 14px;
+    padding: 6px 12px;
     border: none;
-    border-radius: 8px;
-    background: white;
+    border-radius: 6px;
+    background: #3498db;
+    color: white;
     cursor: pointer;
-    font-size: 16px;
-    transition: 0.2s;
 }
 
-.calendar-nav button:hover {
-    transform: translateY(-50%) scale(1.1);
-}
-
-/* 左右配置 */
-#prevMonth { left: 0; }
-#nextMonth { right: 0; }
-
-/* ===== カレンダー ===== */
+/* カレンダー */
 #calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 8px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .day {
     background: white;
-    padding: 15px 0;
-    border-radius: 10px;
+    padding: 14px 0;
+    border-radius: 8px;
     cursor: pointer;
-    transition: 0.2s;
+    border: 1px solid #ddd;
 }
 
 .day:hover {
-    background: #ffe1f0;
+    background: #ecf5ff;
 }
 
-/* ===== 日記カード ===== */
+/* 日記カード */
 .diary-card {
     background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
 }
 
-/* テキスト */
+/* 入力 */
 textarea {
     width: 100%;
     height: 150px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    font-size: 16px;
-    resize: none;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-size: 15px;
 }
 
 /* ボタンエリア */
 .button-area {
     display: flex;
-    justify-content: center;
-    gap: 15px;
+    gap: 10px;
     margin-top: 15px;
 }
 
 /* ボタン */
 button {
-    padding: 10px 20px;
+    padding: 8px 16px;
     border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #ff8ac6;
+    border-radius: 6px;
+    background: #3498db;
     color: white;
-    font-size: 15px;
-    transition: 0.2s;
+    cursor: pointer;
 }
 
 button:hover {
-    background: #ff5ca8;
+    background: #2980b9;
 }
 
 /* 結果 */
 #result {
-    margin-top: 15px;
+    margin-top: 12px;
     font-weight: bold;
 }
