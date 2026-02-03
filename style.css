@@ -1,120 +1,64 @@
 body{
-background:#eef1f7;
-font-family:sans-serif;
-display:flex;
-justify-content:center;
-margin:0;
+  font-family:Arial;
+  background:#f0f4f8;
+  text-align:center;
 }
 
-.app{
-width:360px;
-margin-top:30px;
+.calendar-header{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-bottom:10px;
 }
 
-.card{
-background:white;
-padding:20px;
-border-radius:16px;
-box-shadow:0 8px 20px rgba(0,0,0,0.08);
+.nav-btn{
+  padding:8px 14px;
+  border:none;
+  border-radius:8px;
+  background:#3498db;
+  color:white;
+  cursor:pointer;
 }
 
-.hidden{
-display:none;
+#weekdayHeader,
+#calendar{
+  display:grid;
+  grid-template-columns:repeat(7,60px);
+  justify-content:center;
 }
 
-h1{
-text-align:center;
+#weekdayHeader div,
+#calendar div{
+  width:60px;
+  height:60px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
+#calendar span{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  border:1px solid #ccc;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:white;
+  cursor:pointer;
 }
-
-button{
-background:#6a8dff;
-color:white;
-border:none;
-padding:8px 14px;
-border-radius:10px;
-cursor:pointer;
-}
-
-button:hover{
-background:#4d6ee6;
-}
-
-.menu{
-display:flex;
-justify-content:center;
-gap:10px;
-margin-top:15px;
-}
-
-/* calendar */
-
-#calendarGrid{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:6px;
-margin-top:10px;
-}
-
-.weekday{
-font-size:12px;
-text-align:center;
-opacity:0.6;
-}
-
-.date span{
-display:flex;
-align-items:center;
-justify-content:center;
-width:38px;
-height:38px;
-border-radius:50%;
-background:#eee;
-margin:auto;
-cursor:pointer;
-}
-
-/* mood colors */
-.happy span{background:#ffe066;}
-.normal span{background:#dcdcdc;}
-.sad span{background:#9ec5fe;}
-.angry span{background:#ff8787;}
-.tired span{background:#cdb4db;}
-.excited span{background:#a0f0a0;}
-
-/* diary */
 
 textarea{
-width:100%;
-height:120px;
-border-radius:10px;
-border:1px solid #ccc;
-padding:10px;
-margin-top:10px;
-font-size:14px;
+  width:300px;
+  height:150px;
+  margin-top:10px;
 }
 
-select{
-width:100%;
-padding:8px;
-border-radius:8px;
-margin-top:10px;
+.wordItem{
+  cursor:pointer;
+  padding:5px;
 }
 
-.goal{
-background:#e8ffe8;
-}
-
-/* dictionary */
-
-#dictionary{
-max-height:250px;
-overflow:auto;
-line-height:1.6;
-margin-top:10px;
+.wordItem:hover{
+  background:#ddd;
 }
