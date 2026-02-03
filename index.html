@@ -8,67 +8,60 @@
 
 <body>
 
-<div class="app">
-
 <h1>English Diary</h1>
 
-<!-- ⭐ Calendar -->
-<div id="screen1" class="card">
+<!-- ===== Calendar Page ===== -->
+<div id="calendarPage">
 
-<div class="topbar">
-<button onclick="prevMonth()">←</button>
-<h2 id="monthTitle"></h2>
-<button onclick="nextMonth()">→</button>
+<div class="calendar-header">
+  <button class="nav-btn" onclick="prevMonth()">←</button>
+  <div class="calendar-title" id="monthTitle"></div>
+  <button class="nav-btn" onclick="nextMonth()">→</button>
 </div>
 
-<div id="calendarGrid"></div>
+<div id="weekdayHeader"></div>
+<div id="calendar"></div>
 
-<div class="menu">
-<button onclick="openAnalyze()">Analyze</button>
+<br>
+<button class="nav-btn" onclick="openAnalyze()">Analyze</button>
+
 </div>
 
-</div>
-
-
-<!-- ⭐ Diary -->
-<div id="screen2" class="card hidden">
+<!-- ===== Diary Page ===== -->
+<div id="diaryPage" style="display:none">
 
 <h2 id="selectedDate"></h2>
 
-<select id="mood">
-<option value="">Mood</option>
-<option value="happy">😊 Happy</option>
-<option value="normal">😐 Normal</option>
-<option value="sad">😢 Sad</option>
-<option value="angry">😡 Angry</option>
-<option value="tired">😴 Tired</option>
-<option value="excited">🌟 Excited</option>
+<select id="moodSelect">
+  <option value="happy">😊 Happy</option>
+  <option value="sad">😢 Sad</option>
+  <option value="excited">🤩 Excited</option>
+  <option value="tired">😴 Tired</option>
+  <option value="angry">😡 Angry</option>
+  <option value="calm">😌 Calm</option>
 </select>
 
-<textarea id="diaryText"></textarea>
+<textarea id="diaryText" placeholder="Write only English..."></textarea>
 
 <p id="charCount">0 / 50</p>
 
-<div class="menu">
-<button onclick="saveDiary()">Save</button>
-<button onclick="backCalendar()">Back</button>
-</div>
+<button class="nav-btn" onclick="saveDiary()">Save</button>
+<button class="nav-btn" onclick="backToCalendar()">Back</button>
 
 </div>
 
-
-<!-- ⭐ Analyze -->
-<div id="screen3" class="card hidden">
+<!-- ===== Analyze Page ===== -->
+<div id="analyzePage" style="display:none">
 
 <h2>Word Analyze</h2>
 
-<div id="dictionary"></div>
+<div id="wordList"></div>
 
-<div class="menu">
-<button onclick="backCalendar()">Back</button>
-</div>
+<hr>
 
-</div>
+<div id="dateList"></div>
+
+<button class="nav-btn" onclick="backToCalendar()">Back</button>
 
 </div>
 
