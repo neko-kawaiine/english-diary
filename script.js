@@ -1,155 +1,216 @@
-let now=new Date();
-let year=now.getFullYear();
-let month=now.getMonth();
-let selected=null;
+let currentDate = new Date();
+let selectedDateKey = null;
 
-const weekdays=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-
-function showScreen(n){
-["screen1","screen2","screen3"].forEach(id=>{
-document.getElementById(id).classList.add("hidden");
-});
-document.getElementById("screen"+n).classList.remove("hidden");
+function formatDateKey(date){
+  return date.toISOString().split("T")[0];
 }
 
-/* calendar */
+function renderCalendar(){
 
-function drawCalendar(){
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
 
-const grid=document.getElementById("calendarGrid");
-grid.innerHTML="";
+  document.getElementById("monthTitle").textContent =
+    `${year} / ${month+1}`;
 
-monthTitle.textContent=`${year}/${month+1}`;
+  const grid = document.getElementById("calendarGrid");
+  grid.innerHTML = "";
 
-/* weekday */
-weekdays.forEach(d=>{
-let div=document.createElement("div");
-div.textContent=d;
-div.classList.add("weekday");
-grid.appendChild(div);
-});
+  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  days.forEach(d=>{
+    const div = document.createElement("div");
+    div.textContent = d;
+    div.className = "day-name";
+    grid.appendChild(div);
+  });
 
-let first=new Date(year,month,1).getDay();
-let last=new Date(year,month+1,0).getDate();
+  const firstDay = new Date(year,month,1).getDay();
+  const lastDate = new Date(year,month+1,0).getDate();
 
-for(let i=0;i<first;i++) grid.appendChild(document.createElement("div"));
+  for(let i=0;i<firstDay;i++){
+    grid.appendChild(document.createElement("div"));
+  }
 
-for(let d=1;d<=last;d++){
+  for(let d=1; d<=lastDate; d++){
 
-let div=document.createElement("div");
-div.classList.add("date");
+    const date = new Date(year,month,d);
+    const key = formatDateKey(date);
 
-let span=document.createElement("span");
-span.textContent=d;
+    const div = document.createElement("div");
+    div.textContent = d;
+    div.className = "date-cell";
 
-let key=`${year}-${month+1}-${d}`;
-let data=JSON.parse(localStorage.getItem(key));
+    const diary = JSON.parse(localStorage.getItem("diary_"+key));
 
-if(data?.mood) div.classList.add(data.mood);
+    if(diary){
+      div.style.background = diary.color || "#ccc";
+    }
 
-div.onclick=()=>{
-selected=key;
-selectedDate.textContent=key;
-loadDiary();
-showScreen(2);
-};
+    div.onclick = ()=>openDiary(key);
 
-div.appendChild(span);
-grid.appendChild(div);
+    grid.appendChild(div);
+  }
 }
-}
-
-/* diary */
-
-function loadDiary(){
-let data=JSON.parse(localStorage.getItem(selected))||{};
-diaryText.value=data.text||"";
-mood.value=data.mood||"";
-updateCount();
-}
-
-function saveDiary(){
-
-let text=diaryText.value;
-
-/* English only */
-if(/[ぁ-んァ-ン一-龥]/.test(text)){
-alert("Please write in English only");
-return;
-}
-
-localStorage.setItem(selected,JSON.stringify({
-text:text,
-mood:mood.value
-}));
-
-drawCalendar();
-backCalendar();
-}
-
-function backCalendar(){
-showScreen(1);
-}
-
-/* character count */
-
-diaryText.addEventListener("input",updateCount);
-
-function updateCount(){
-
-let n=diaryText.value.length;
-charCount.textContent=`${n} / 50`;
-
-if(n>=50){
-screen2.classList.add("goal");
-}else{
-screen2.classList.remove("goal");
-}
-}
-
-/* analyze */
-
-function openAnalyze(){
-
-let words={};
-
-for(let i=0;i<localStorage.length;i++){
-
-let data=JSON.parse(localStorage.getItem(localStorage.key(i)));
-
-if(!data?.text) continue;
-
-data.text.toLowerCase().split(/\W+/).forEach(w=>{
-if(!w) return;
-words[w]=(words[w]||0)+1;
-});
-}
-
-let html="";
-
-Object.entries(words)
-.sort((a,b)=>b[1]-a[1])
-.forEach(([w,c])=>{
-html+=`<div>${w} : ${c}</div>`;
-});
-
-dictionary.innerHTML=html;
-
-showScreen(3);
-}
-
-/* month move */
 
 function prevMonth(){
-month--;
-if(month<0){month=11;year--;}
-drawCalendar();
+  currentDate.setMonth(currentDate.getMonth()-1);
+  renderCalendar();
 }
 
 function nextMonth(){
-month++;
-if(month>11){month=0;year++;}
-drawCalendar();
+  currentDate.setMonth(currentDate.getMonth()+1);
+  renderCalendar();
 }
 
-drawCalendar();
+function openDiary(key){
+
+  selectedDateKey = key;
+
+  document.getElementById("calendarPage").style.display="none";
+  document.getElementById("diaryPage").style.display="block";
+
+  document.getElementById("selectedDate").textContent = key;
+
+  const saved = JSON.parse(localStorage.getItem("diary_"+key));
+
+  if(saved){
+    diaryText.value = saved.text;
+    moodSelect.value = saved.mood;
+  }else{
+    diaryText.value="";
+  }
+
+  updateCharCount();
+}
+
+function backToCalendar(){
+  document.getElementById("calendarPage").style.display="block";
+  document.getElementById("diaryPage").style.display="none";
+  renderCalendar();
+}
+
+/* 英語チェック */
+function isEnglishOnly(text){
+  return /^[A-Za-z0-9\s.,!?'"-]*$/.test(text);
+}
+
+/* 文字数 */
+function updateCharCount(){
+  const text = diaryText.value;
+  const count = text.length;
+
+  charCount.textContent = count;
+
+  if(count >= 50){
+    diaryText.style.background = "#d4ffd4";
+  }else{
+    diaryText.style.background = "white";
+  }
+}
+
+diaryText.addEventListener("input", updateCharCount);
+
+/* 保存 */
+function saveDiary(){
+
+  const text = diaryText.value;
+
+  if(!isEnglishOnly(text)){
+    alert("English only!");
+    return;
+  }
+
+  const mood = moodSelect.value;
+
+  const colors = {
+    happy:"#ffd966",
+    sad:"#9fc5e8",
+    angry:"#ff6b6b",
+    calm:"#b6d7a8",
+    excited:"#f4cccc",
+    tired:"#d9d2e9"
+  };
+
+  const data = {
+    text,
+    mood,
+    color:colors[mood]
+  };
+
+  localStorage.setItem("diary_"+selectedDateKey, JSON.stringify(data));
+
+  updateWordStats(selectedDateKey,text);
+
+  backToCalendar();
+}
+
+/* ===== 単語分析 ===== */
+
+function updateWordStats(dateKey,text){
+
+  const words = text.toLowerCase().match(/[a-z']+/g);
+  if(!words) return;
+
+  let stats = JSON.parse(localStorage.getItem("wordStats") || "{}");
+
+  words.forEach(w=>{
+    if(!stats[w]) stats[w]=[];
+
+    if(!stats[w].includes(dateKey)){
+      stats[w].push(dateKey);
+    }
+  });
+
+  localStorage.setItem("wordStats",JSON.stringify(stats));
+}
+
+/* Analyze画面 */
+function openAnalyze(){
+
+  document.getElementById("calendarPage").style.display="none";
+  document.getElementById("analyzePage").style.display="block";
+
+  const container = document.getElementById("wordList");
+  container.innerHTML="";
+
+  const stats = JSON.parse(localStorage.getItem("wordStats") || "{}");
+
+  Object.keys(stats).sort().forEach(word=>{
+
+    const btn = document.createElement("button");
+    btn.textContent = `${word} (${stats[word].length})`;
+
+    btn.onclick = ()=>showWordDates(word);
+
+    container.appendChild(btn);
+  });
+}
+
+/* 単語→日付一覧 */
+function showWordDates(word){
+
+  const stats = JSON.parse(localStorage.getItem("wordStats"));
+
+  const container = document.getElementById("wordDates");
+  container.innerHTML = `<h3>${word}</h3>`;
+
+  stats[word].forEach(date=>{
+
+    const btn = document.createElement("button");
+    btn.textContent = date;
+
+    btn.onclick = ()=>{
+      openDiary(date);
+    };
+
+    container.appendChild(btn);
+  });
+}
+
+function backFromAnalyze(){
+  document.getElementById("analyzePage").style.display="none";
+  document.getElementById("calendarPage").style.display="block";
+}
+
+/* 初期表示 */
+renderCalendar();
