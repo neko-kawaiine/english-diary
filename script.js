@@ -1,175 +1,178 @@
 let currentDate = new Date();
 let selectedDate = null;
+
+// diaries を localStorage から取得
 let diaries = JSON.parse(localStorage.getItem("diaries") || "{}");
 
+/* 画面切替 */
 function showScreen(id){
-document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
-document.getElementById(id).classList.remove("hidden");
+  document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
 }
 
-/* calendar */
-
+/* カレンダー生成 */
 function renderCalendar(){
+  let year = currentDate.getFullYear();
+  let month = currentDate.getMonth();
 
-let year = currentDate.getFullYear();
-let month = currentDate.getMonth();
+  document.getElementById("monthLabel").textContent = `${year} / ${month+1}`;
 
-document.getElementById("monthLabel").textContent =
-`${year} / ${month+1}`;
+  let firstDay = new Date(year, month, 1).getDay();
+  let lastDate = new Date(year, month+1, 0).getDate();
 
-let firstDay = new Date(year,month,1).getDay();
-let lastDate = new Date(year,month+1,0).getDate();
+  let cal = document.getElementById("calendar");
+  cal.innerHTML = "";
 
-let cal = document.getElementById("calendar");
-cal.innerHTML="";
+  // 空白の日
+  for(let i=0; i<firstDay; i++){
+    let blank = document.createElement("div");
+    cal.appendChild(blank);
+  }
 
-for(let i=0;i<firstDay;i++){
-cal.innerHTML+="<div></div>";
+  // 日付生成
+  for(let d=1; d<=lastDate; d++){
+    let key = `${year}-${month+1}-${d}`;
+    
+    // ← 安全に emotion を取得
+    let emo = "";
+    if(diaries[key] && diaries[key].emotion){
+      emo = diaries[key].emotion;
+    }
+
+    let div = document.createElement("div");
+    div.className = "day " + emo;
+    div.textContent = d;
+
+    div.onclick = function(){ openDiary(key); }
+
+    cal.appendChild(div);
+  }
 }
 
-for(let d=1; d<=lastDate; d++){
-
-let key = `${year}-${month+1}-${d}`;
-let emo = diaries[key]?.emotion || "";
-
-let div = document.createElement("div");
-div.className = "day " + emo;
-div.textContent = d;
-
-div.onclick = ()=> openDiary(key);
-
-cal.appendChild(div);
-}
-}
-
+/* 月移動 */
 function changeMonth(n){
-currentDate.setMonth(currentDate.getMonth()+n);
-renderCalendar();
+  currentDate.setMonth(currentDate.getMonth() + n);
+  renderCalendar();
 }
 
-/* diary */
-
+/* 日記画面 */
 function openDiary(dateKey){
-selectedDate = dateKey;
-showScreen("diaryScreen");
+  selectedDate = dateKey;
+  showScreen("diaryScreen");
 
-document.getElementById("diaryDate").textContent = dateKey;
+  document.getElementById("diaryDate").textContent = dateKey;
 
-let data = diaries[dateKey] || {};
-document.getElementById("diaryText").value = data.text || "";
-document.getElementById("emotion").value = data.emotion || "";
+  let data = diaries[dateKey] || {};
+  document.getElementById("diaryText").value = data.text || "";
+  document.getElementById("emotion").value = data.emotion || "";
 
-updateCounter();
+  updateCounter();
 }
 
+/* 文字数カウント＆50達成背景 */
 function updateCounter(){
-let text = document.getElementById("diaryText").value;
-let count = text.length;
+  let text = document.getElementById("diaryText").value;
+  let count = text.length;
 
-document.getElementById("counter").textContent = `${count} / 50`;
+  document.getElementById("counter").textContent = `${count} / 50`;
 
-if(count>=50){
-document.getElementById("diaryText").classList.add("goal");
-}else{
-document.getElementById("diaryText").classList.remove("goal");
+  if(count >= 50){
+    document.getElementById("diaryText").classList.add("goal");
+  } else {
+    document.getElementById("diaryText").classList.remove("goal");
+  }
 }
-}
 
-document.getElementById("diaryText").addEventListener("input",updateCounter);
-
+/* 日本語チェック */
 function containsJapanese(str){
-return /[ぁ-んァ-ン一-龯]/.test(str);
+  return /[ぁ-んァ-ン一-龯]/.test(str);
 }
 
+document.getElementById("diaryText").addEventListener("input", updateCounter);
+
+/* 日記保存 */
 function saveDiary(){
+  let text = document.getElementById("diaryText").value;
 
-let text = document.getElementById("diaryText").value;
+  if(containsJapanese(text)){
+    alert("English only!");
+    return;
+  }
 
-if(containsJapanese(text)){
-alert("English only!");
-return;
+  let emo = document.getElementById("emotion").value;
+
+  diaries[selectedDate] = {text: text, emotion: emo};
+  localStorage.setItem("diaries", JSON.stringify(diaries));
+
+  backCalendar();
+  renderCalendar();
 }
 
-let emo = document.getElementById("emotion").value;
-
-diaries[selectedDate] = {text, emotion:emo};
-localStorage.setItem("diaries",JSON.stringify(diaries));
-
-backCalendar();
-renderCalendar();
-}
-
+/* カレンダーに戻る */
 function backCalendar(){
-showScreen("calendarScreen");
+  showScreen("calendarScreen");
 }
 
-/* analyze */
-
+/* Analyze画面 */
 function openAnalyze(){
-showScreen("analyzeScreen");
-buildDictionary();
+  showScreen("analyzeScreen");
+  buildDictionary();
 }
 
+/* 辞書生成 */
 function buildDictionary(){
+  let dict = {};
 
-let dict = {};
+  for(let date in diaries){
+    let words = diaries[date].text.toLowerCase().match(/[a-z]+/g);
+    if(!words) continue;
 
-for(let date in diaries){
+    words.forEach(w => {
+      if(!dict[w]) dict[w] = [];
+      dict[w].push(date);
+    });
+  }
 
-let words = diaries[date].text
-.toLowerCase()
-.match(/[a-z]+/g);
+  let container = document.getElementById("dictionary");
+  container.innerHTML = "";
 
-if(!words) continue;
+  let grouped = {};
 
-words.forEach(w=>{
-if(!dict[w]) dict[w]=[];
-dict[w].push(date);
-});
+  Object.keys(dict).sort().forEach(word => {
+    let letter = word[0].toUpperCase();
+    if(!grouped[letter]) grouped[letter] = [];
+    grouped[letter].push(word);
+  });
+
+  for(let letter in grouped){
+    let letterDiv = document.createElement("div");
+    letterDiv.className = "letter";
+    letterDiv.textContent = letter;
+    container.appendChild(letterDiv);
+
+    grouped[letter].forEach(word => {
+      let w = document.createElement("div");
+      w.className = "word";
+      w.textContent = word;
+
+      w.onclick = function(){
+        showDates(word, dict[word]);
+      }
+
+      container.appendChild(w);
+    });
+  }
 }
 
-let container = document.getElementById("dictionary");
-container.innerHTML="";
-
-let grouped = {};
-
-Object.keys(dict).sort().forEach(word=>{
-let letter = word[0].toUpperCase();
-if(!grouped[letter]) grouped[letter]=[];
-grouped[letter].push(word);
-});
-
-for(let letter in grouped){
-
-let letterDiv = document.createElement("div");
-letterDiv.className="letter";
-letterDiv.textContent = letter;
-container.appendChild(letterDiv);
-
-grouped[letter].forEach(word=>{
-
-let w = document.createElement("div");
-w.className="word";
-w.textContent = word;
-
-w.onclick = ()=> showDates(word, dict[word]);
-
-container.appendChild(w);
-
-});
-}
-}
-
+/* 単語使用日付表示 */
 function showDates(word, dates){
+  let list = dates.join("\n");
+  let choose = prompt(`"${word}" used on:\n${list}\nEnter date:`);
 
-let list = dates.join("\n");
-
-let choose = prompt(`"${word}" used on:\n${list}\nEnter date:`);
-
-if(choose && diaries[choose]){
-openDiary(choose);
-}
+  if(choose && diaries[choose]){
+    openDiary(choose);
+  }
 }
 
-/* start */
+/* 初期描画 */
 renderCalendar();
