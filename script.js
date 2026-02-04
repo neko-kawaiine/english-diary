@@ -19,13 +19,10 @@ function renderCalendar(){
   let cal = document.getElementById("calendar");
   cal.innerHTML = "";
 
-  // 空白
   for(let i=0;i<firstDay;i++){
-    let blank = document.createElement("div");
-    cal.appendChild(blank);
+    cal.appendChild(document.createElement("div"));
   }
 
-  // 日付
   for(let d=1; d<=lastDate; d++){
     let key = `${year}-${month+1}-${d}`;
     let emo = "";
@@ -34,8 +31,7 @@ function renderCalendar(){
     let div = document.createElement("div");
     div.className = "day " + emo;
     div.textContent = d;
-
-    div.onclick = function(){ openDiary(key); }
+    div.onclick = () => openDiary(key);
     cal.appendChild(div);
   }
 }
@@ -50,56 +46,39 @@ function changeMonth(n){
 function openDiary(dateKey){
   selectedDate = dateKey;
   showScreen("diaryScreen");
-
   document.getElementById("diaryDate").textContent = dateKey;
-
   let data = diaries[dateKey] || {};
   document.getElementById("diaryText").value = data.text || "";
   document.getElementById("emotion").value = data.emotion || "";
-
   updateCounter();
 }
 
-/* 文字カウント & 50達成 */
+/* 文字数カウント */
 function updateCounter(){
   let text = document.getElementById("diaryText").value;
   let count = text.length;
   document.getElementById("counter").textContent = `${count} / 50`;
-
-  if(count >= 50){
-    document.getElementById("diaryText").classList.add("goal");
-  } else {
-    document.getElementById("diaryText").classList.remove("goal");
-  }
+  if(count>=50){ document.getElementById("diaryText").classList.add("goal"); }
+  else { document.getElementById("diaryText").classList.remove("goal"); }
 }
 document.getElementById("diaryText").addEventListener("input", updateCounter);
 
-/* 日本語チェック */
-function containsJapanese(str){
-  return /[ぁ-んァ-ン一-龯]/.test(str);
-}
+/* 英語のみチェック */
+function containsJapanese(str){ return /[ぁ-んァ-ン一-龯]/.test(str); }
 
-/* 日記保存 */
+/* 保存 */
 function saveDiary(){
   let text = document.getElementById("diaryText").value;
-  if(containsJapanese(text)){
-    alert("English only!");
-    return;
-  }
-
+  if(containsJapanese(text)){ alert("English only!"); return; }
   let emo = document.getElementById("emotion").value;
-
   diaries[selectedDate] = {text: text, emotion: emo};
   localStorage.setItem("diaries", JSON.stringify(diaries));
-
   backCalendar();
   renderCalendar();
 }
 
 /* 戻る */
-function backCalendar(){
-  showScreen("calendarScreen");
-}
+function backCalendar(){ showScreen("calendarScreen"); }
 
 /* Analyze画面 */
 function openAnalyze(){
@@ -107,71 +86,75 @@ function openAnalyze(){
   buildDictionary();
 }
 
-/* 辞書生成 */
+/* 辞書作成 */
 function buildDictionary(){
   let dict = {};
-
   for(let date in diaries){
     let words = diaries[date].text.toLowerCase().match(/[a-z]+/g);
     if(!words) continue;
-
     words.forEach(w=>{
-      if(!dict[w]) dict[w] = [];
+      if(!dict[w]) dict[w]=[];
       dict[w].push(date);
     });
   }
 
   let container = document.getElementById("dictionary");
-  container.innerHTML = "";
+  container.innerHTML="";
 
   let grouped = {};
   Object.keys(dict).sort().forEach(word=>{
     let letter = word[0].toUpperCase();
-    if(!grouped[letter]) grouped[letter] = [];
+    if(!grouped[letter]) grouped[letter]=[];
     grouped[letter].push(word);
   });
 
   for(let letter in grouped){
     let letterDiv = document.createElement("div");
-    letterDiv.className = "letter";
-    letterDiv.textContent = letter;
+    letterDiv.className="letter";
+    letterDiv.textContent=letter;
     container.appendChild(letterDiv);
 
     grouped[letter].forEach(word=>{
       let wDiv = document.createElement("div");
-      wDiv.className = "word";
+      wDiv.className="word";
       let count = dict[word].length;
-      wDiv.innerHTML = `${word} (${count})`; // 使用回数表示
-
-      // クリックで日付リスト表示
-      wDiv.onclick = function(){
-        showWordDates(word, dict[word]);
-      }
-
+      wDiv.innerHTML=`${word} (${count})`;
+      wDiv.onclick = function(){ showWordDates(word, dict[word]); }
       container.appendChild(wDiv);
     });
   }
 }
 
-/* 単語の使用日をリスト表示 */
+/* 単語使用日を画面に表示 */
 function showWordDates(word, dates){
   let container = document.getElementById("dictionary");
-  
+
+  // 既存のリスト削除
+  let oldList = document.getElementById("wordDates");
+  if(oldList) oldList.remove();
+
   let listDiv = document.createElement("div");
-  listDiv.style.margin = "10px 0";
-  listDiv.innerHTML = `<strong>${word} used on:</strong>`;
-  
+  listDiv.id="wordDates";
+  listDiv.style.margin="5px 0";
+  listDiv.innerHTML=`<strong>${word} used on:</strong>`;
+
   dates.forEach(d=>{
-    let btn = document.createElement("button");
-    btn.textContent = d;
-    btn.style.margin = "3px";
-    btn.onclick = function(){ openDiary(d); }
+    let btn=document.createElement("button");
+    btn.textContent=d;
+    btn.onclick=()=>openDiary(d);
     listDiv.appendChild(btn);
   });
 
-  // 上に戻して表示
   container.insertBefore(listDiv, container.firstChild);
 }
+
+/* イベント設定 */
+document.getElementById("prevMonth").onclick = ()=>changeMonth(-1);
+document.getElementById("nextMonth").onclick = ()=>changeMonth(1);
+document.getElementById("saveBtn").onclick = saveDiary;
+document.getElementById("backBtn").onclick = backCalendar;
+document.getElementById("analyzeBtn").onclick = openAnalyze;
+document.getElementById("backAnalyzeBtn").onclick = backCalendar;
 
 /* 初期描画 */
 renderCalendar();
