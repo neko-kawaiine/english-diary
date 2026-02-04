@@ -12,17 +12,36 @@
 <h1>English Diary</h1>
 </header>
 
-<!-- ① Calendar Screen -->
+<!-- ① Calendar -->
 <section id="calendarScreen" class="screen active">
+
+<div class="calendarHeader">
+<button id="prevMonth">◀</button>
+<h2 id="monthTitle"></h2>
+<button id="nextMonth">▶</button>
+</div>
+
 <div id="calendar"></div>
+
 <button id="analyzeBtn">Analyze</button>
 </section>
 
-<!-- ② Diary Screen -->
+<!-- ② Diary -->
 <section id="diaryScreen" class="screen">
+
 <h2 id="selectedDate"></h2>
 
-<textarea id="diaryInput" placeholder="Write your diary in English..."></textarea>
+<select id="mood">
+<option value="">Mood</option>
+<option value="happy">😊 Happy</option>
+<option value="sad">😢 Sad</option>
+<option value="excited">🤩 Excited</option>
+<option value="tired">😴 Tired</option>
+<option value="angry">😡 Angry</option>
+<option value="calm">😌 Calm</option>
+</select>
+
+<textarea id="diaryInput"></textarea>
 
 <div class="info">
 <span id="charCount">0</span>/50 words
@@ -32,14 +51,14 @@
 
 <button id="saveBtn">Save</button>
 <button class="backBtn">Back</button>
+
 </section>
 
-<!-- ③ Analyze Screen -->
+<!-- ③ Analyze -->
 <section id="analyzeScreen" class="screen">
-<h2>Word Analysis</h2>
+<h2>Word Dictionary</h2>
 
 <div id="wordList"></div>
-
 <div id="dateList"></div>
 
 <button class="backBtn">Back</button>
