@@ -1,71 +1,118 @@
-const calendar = document.getElementById("calendar");
-const monthLabel = document.getElementById("monthLabel");
-const diaryInput = document.getElementById("diaryInput");
-const result = document.getElementById("result");
+const screens = {
+calendar: document.getElementById("calendarScreen"),
+diary: document.getElementById("diaryScreen"),
+analyze: document.getElementById("analyzeScreen")
+};
 
-let currentDate = new Date();
-let selectedDate = null;
+const calendar = document.getElementById("calendar");
+const diaryInput = document.getElementById("diaryInput");
+const charCount = document.getElementById("charCount");
+const warning = document.getElementById("warning");
+const saveBtn = document.getElementById("saveBtn");
+const selectedDateText = document.getElementById("selectedDate");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const wordList = document.getElementById("wordList");
+const dateList = document.getElementById("dateList");
+
+let selectedDate = "";
+
+/* 画面切替 */
+function showScreen(name){
+Object.values(screens).forEach(s=>s.classList.remove("active"));
+screens[name].classList.add("active");
+}
 
 /* カレンダー生成 */
-function generateCalendar(date) {
+function createCalendar(){
+calendar.innerHTML="";
+for(let i=1;i<=31;i++){
+const div=document.createElement("div");
+div.className="day";
+div.textContent=i;
+div.onclick=()=>openDiary(`2026-02-${String(i).padStart(2,"0")}`);
+calendar.appendChild(div);
+}
+}
 
-    calendar.innerHTML = "";
+createCalendar();
 
-    const year = date.getFullYear();
-    const month = date.getMonth();
+/* 日記画面 */
+function openDiary(date){
+selectedDate=date;
+selectedDateText.textContent=date;
 
-    monthLabel.textContent = `${year} / ${month + 1}`;
+diaryInput.value=localStorage.getItem(date)||"";
+updateCount();
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
+showScreen("diary");
+}
 
-    for (let i = 0; i < firstDay; i++) {
-        calendar.appendChild(document.createElement("div"));
-    }
+/* 文字数 */
+diaryInput.addEventListener("input",updateCount);
 
-    for (let day = 1; day <= lastDate; day++) {
+function updateCount(){
+const words = diaryInput.value.trim().split(/\s+/).filter(Boolean);
+charCount.textContent = words.length;
 
-        const div = document.createElement("div");
-        div.textContent = day;
-        div.classList.add("day");
-
-        div.onclick = () => {
-            selectedDate = `${year}-${month + 1}-${day}`;
-            diaryInput.value = localStorage.getItem(selectedDate) || "";
-        };
-
-        calendar.appendChild(div);
-    }
+if(/[ぁ-んァ-ン一-龥]/.test(diaryInput.value)){
+warning.textContent="⚠ 日本語は使用できません";
+saveBtn.disabled=true;
+}else{
+warning.textContent="";
+saveBtn.disabled=false;
+}
 }
 
 /* 保存 */
-document.getElementById("saveBtn").onclick = () => {
-
-    if (!selectedDate) return alert("日付を選んでください");
-
-    localStorage.setItem(selectedDate, diaryInput.value);
-    alert("Saved!");
+saveBtn.onclick=()=>{
+localStorage.setItem(selectedDate, diaryInput.value);
+alert("Saved!");
 };
 
-/* 分析（超簡易版） */
-document.getElementById("analyzeBtn").onclick = () => {
+/* 戻る */
+document.querySelectorAll(".backBtn").forEach(btn=>{
+btn.onclick=()=>showScreen("calendar");
+});
 
-    const text = diaryInput.value;
-
-    const wordCount = text.split(/\s+/).filter(w => w).length;
-
-    result.textContent = `Word count: ${wordCount}`;
+/* Analyze */
+analyzeBtn.onclick=()=>{
+generateAnalysis();
+showScreen("analyze");
 };
 
-/* 月移動 */
-document.getElementById("prevMonth").onclick = () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    generateCalendar(currentDate);
+function generateAnalysis(){
+wordList.innerHTML="";
+dateList.innerHTML="";
+
+const wordsMap={};
+
+Object.keys(localStorage).forEach(date=>{
+const text=localStorage.getItem(date);
+const words=text.toLowerCase().split(/\s+/);
+
+words.forEach(w=>{
+if(!wordsMap[w]) wordsMap[w]=[];
+wordsMap[w].push(date);
+});
+});
+
+const sorted=Object.keys(wordsMap).sort();
+
+sorted.forEach(word=>{
+const span=document.createElement("span");
+span.textContent=word;
+
+span.onclick=()=>{
+dateList.innerHTML="";
+wordsMap[word].forEach(date=>{
+const d=document.createElement("div");
+d.textContent=date;
+
+d.onclick=()=>openDiary(date);
+dateList.appendChild(d);
+});
 };
 
-document.getElementById("nextMonth").onclick = () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    generateCalendar(currentDate);
-};
-
-generateCalendar(currentDate);
+wordList.appendChild(span);
+});
+}
