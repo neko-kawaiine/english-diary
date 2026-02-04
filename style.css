@@ -1,6 +1,6 @@
 body{
-font-family: "Segoe UI", sans-serif;
-background: #f4f5f7;
+font-family:sans-serif;
+background:#f4f6fb;
 margin:0;
 color:#444;
 }
@@ -9,8 +9,6 @@ header{
 text-align:center;
 padding:20px;
 background:#dbeafe;
-color:#333;
-letter-spacing:1px;
 }
 
 .screen{
@@ -20,78 +18,67 @@ max-width:700px;
 margin:auto;
 }
 
-.active{
-display:block;
+.active{display:block;}
+
+.calendarHeader{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:20px;
+}
+
+#calendar{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:12px;
+margin-top:20px;
+}
+
+.day{
+width:60px;
+height:60px;
+border-radius:50%;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.day.green{
+background:#bbf7d0;
+}
+
+.day.happy{background:#fde68a;}
+.day.sad{background:#bfdbfe;}
+.day.excited{background:#fbcfe8;}
+.day.tired{background:#ddd6fe;}
+.day.angry{background:#fecaca;}
+.day.calm{background:#d1fae5;}
+
+textarea{
+width:100%;
+height:200px;
+border-radius:12px;
+padding:15px;
+border:1px solid #ddd;
 }
 
 button{
 background:#c7d2fe;
 border:none;
 padding:10px 20px;
-margin:10px 5px;
 border-radius:10px;
 cursor:pointer;
-transition:0.3s;
 }
 
-button:hover{
-background:#a5b4fc;
+#wordList h3{
+margin-top:20px;
 }
 
-#calendar{
-display:grid;
-grid-template-columns: repeat(7,1fr);
-gap:10px;
-margin-bottom:20px;
-}
-
-.day{
-background:white;
-padding:15px;
-border-radius:12px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
-cursor:pointer;
-text-align:center;
-}
-
-.day:hover{
-background:#e0e7ff;
-}
-
-textarea{
-width:100%;
-height:200px;
-border-radius:12px;
-border:1px solid #ddd;
-padding:15px;
-font-size:16px;
-}
-
-.info{
-margin-top:10px;
-font-size:14px;
-color:#666;
-}
-
-#warning{
-color:#ef4444;
-font-weight:bold;
-}
-
-#wordList span{
-display:inline-block;
-background:white;
-padding:8px 12px;
-margin:5px;
-border-radius:8px;
-box-shadow:0 1px 4px rgba(0,0,0,0.1);
-cursor:pointer;
-}
-
-#dateList div{
-background:#fef3c7;
-padding:10px;
-margin:5px;
-border-radius:8px;
+.word{
+display:block;
+margin-left:20px;
 cursor:pointer;
 }
