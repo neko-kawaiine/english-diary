@@ -2,40 +2,48 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>English Diary</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+<header>
+<h1>English Diary</h1>
+</header>
 
-    <h1>English Diary</h1>
+<!-- ① Calendar Screen -->
+<section id="calendarScreen" class="screen active">
+<div id="calendar"></div>
+<button id="analyzeBtn">Analyze</button>
+</section>
 
-    <!-- 月移動 -->
-    <div class="calendar-nav">
-        <button id="prevMonth">←</button>
-        <div id="monthLabel"></div>
-        <button id="nextMonth">→</button>
-    </div>
+<!-- ② Diary Screen -->
+<section id="diaryScreen" class="screen">
+<h2 id="selectedDate"></h2>
 
-    <!-- カレンダー -->
-    <div id="calendar"></div>
+<textarea id="diaryInput" placeholder="Write your diary in English..."></textarea>
 
-    <!-- 日記入力 -->
-    <div class="diary-card">
-        <textarea id="diaryInput" placeholder="Write your diary..."></textarea>
-
-        <div class="button-area">
-            <button id="saveBtn">Save</button>
-            <button id="analyzeBtn">Analyze</button>
-        </div>
-
-        <div id="result"></div>
-    </div>
-
+<div class="info">
+<span id="charCount">0</span>/50 words
 </div>
+
+<p id="warning"></p>
+
+<button id="saveBtn">Save</button>
+<button class="backBtn">Back</button>
+</section>
+
+<!-- ③ Analyze Screen -->
+<section id="analyzeScreen" class="screen">
+<h2>Word Analysis</h2>
+
+<div id="wordList"></div>
+
+<div id="dateList"></div>
+
+<button class="backBtn">Back</button>
+</section>
 
 <script src="script.js"></script>
 </body>
