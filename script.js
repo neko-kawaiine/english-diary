@@ -1,118 +1,191 @@
-const screens = {
-calendar: document.getElementById("calendarScreen"),
-diary: document.getElementById("diaryScreen"),
-analyze: document.getElementById("analyzeScreen")
-};
-
-const calendar = document.getElementById("calendar");
+const calendarDiv = document.getElementById("calendar");
+const monthTitle = document.getElementById("monthTitle");
 const diaryInput = document.getElementById("diaryInput");
 const charCount = document.getElementById("charCount");
+const moodSelect = document.getElementById("mood");
 const warning = document.getElementById("warning");
-const saveBtn = document.getElementById("saveBtn");
-const selectedDateText = document.getElementById("selectedDate");
-const analyzeBtn = document.getElementById("analyzeBtn");
-const wordList = document.getElementById("wordList");
-const dateList = document.getElementById("dateList");
 
+let currentDate = new Date();
 let selectedDate = "";
 
-/* 画面切替 */
+const screens={
+calendar:calendarScreen,
+diary:diaryScreen,
+analyze:analyzeScreen
+};
+
 function showScreen(name){
 Object.values(screens).forEach(s=>s.classList.remove("active"));
 screens[name].classList.add("active");
 }
 
 /* カレンダー生成 */
+
 function createCalendar(){
-calendar.innerHTML="";
-for(let i=1;i<=31;i++){
-const div=document.createElement("div");
+calendarDiv.innerHTML="";
+
+let year=currentDate.getFullYear();
+let month=currentDate.getMonth();
+
+monthTitle.textContent=`${year} / ${month+1}`;
+
+let lastDay=new Date(year,month+1,0).getDate();
+
+for(let i=1;i<=lastDay;i++){
+
+let dateStr=`${year}-${String(month+1).padStart(2,"0")}-${String(i).padStart(2,"0")}`;
+
+let div=document.createElement("div");
 div.className="day";
 div.textContent=i;
-div.onclick=()=>openDiary(`2026-02-${String(i).padStart(2,"0")}`);
-calendar.appendChild(div);
+
+let data=JSON.parse(localStorage.getItem(dateStr)||"{}");
+
+if(data.words>=50) div.classList.add("green");
+if(data.mood) div.classList.add(data.mood);
+
+div.onclick=()=>openDiary(dateStr);
+
+calendarDiv.appendChild(div);
 }
 }
 
 createCalendar();
 
-/* 日記画面 */
+/* 月移動 */
+
+prevMonth.onclick=()=>{
+currentDate.setMonth(currentDate.getMonth()-1);
+createCalendar();
+};
+
+nextMonth.onclick=()=>{
+currentDate.setMonth(currentDate.getMonth()+1);
+createCalendar();
+};
+
+/* 日記 */
+
 function openDiary(date){
 selectedDate=date;
 selectedDateText.textContent=date;
 
-diaryInput.value=localStorage.getItem(date)||"";
+let data=JSON.parse(localStorage.getItem(date)||"{}");
+
+diaryInput.value=data.text||"";
+moodSelect.value=data.mood||"";
+
 updateCount();
 
 showScreen("diary");
 }
 
-/* 文字数 */
 diaryInput.addEventListener("input",updateCount);
 
 function updateCount(){
-const words = diaryInput.value.trim().split(/\s+/).filter(Boolean);
-charCount.textContent = words.length;
+
+let words=diaryInput.value.trim().split(/\s+/).filter(Boolean);
+charCount.textContent=words.length;
 
 if(/[ぁ-んァ-ン一-龥]/.test(diaryInput.value)){
-warning.textContent="⚠ 日本語は使用できません";
+warning.textContent="日本語禁止";
 saveBtn.disabled=true;
 }else{
 warning.textContent="";
 saveBtn.disabled=false;
 }
+
+if(words.length>=50){
+diaryInput.style.background="#dcfce7";
+}else{
+diaryInput.style.background="white";
+}
 }
 
 /* 保存 */
+
 saveBtn.onclick=()=>{
-localStorage.setItem(selectedDate, diaryInput.value);
-alert("Saved!");
+
+let words=diaryInput.value.trim().split(/\s+/).filter(Boolean);
+
+localStorage.setItem(selectedDate,JSON.stringify({
+text:diaryInput.value,
+words:words.length,
+mood:moodSelect.value
+}));
+
+createCalendar();
+alert("Saved");
 };
 
-/* 戻る */
-document.querySelectorAll(".backBtn").forEach(btn=>{
-btn.onclick=()=>showScreen("calendar");
-});
-
 /* Analyze */
+
 analyzeBtn.onclick=()=>{
 generateAnalysis();
 showScreen("analyze");
 };
 
 function generateAnalysis(){
+
 wordList.innerHTML="";
 dateList.innerHTML="";
 
-const wordsMap={};
+let dictionary={};
 
 Object.keys(localStorage).forEach(date=>{
-const text=localStorage.getItem(date);
-const words=text.toLowerCase().split(/\s+/);
+let data=JSON.parse(localStorage.getItem(date));
+
+if(!data.text) return;
+
+let words=data.text.toLowerCase().split(/\s+/);
 
 words.forEach(w=>{
-if(!wordsMap[w]) wordsMap[w]=[];
-wordsMap[w].push(date);
+if(!dictionary[w]) dictionary[w]=[];
+dictionary[w].push(date);
 });
 });
 
-const sorted=Object.keys(wordsMap).sort();
+/* A-Z構造 */
 
-sorted.forEach(word=>{
-const span=document.createElement("span");
-span.textContent=word;
+let grouped={};
 
-span.onclick=()=>{
+Object.keys(dictionary).forEach(word=>{
+let first=word[0].toUpperCase();
+
+if(!grouped[first]) grouped[first]=[];
+grouped[first].push(word);
+});
+
+Object.keys(grouped).sort().forEach(letter=>{
+
+let h=document.createElement("h3");
+h.textContent=letter;
+wordList.appendChild(h);
+
+grouped[letter].sort().forEach(word=>{
+
+let w=document.createElement("span");
+w.textContent=word;
+w.className="word";
+
+w.onclick=()=>{
 dateList.innerHTML="";
-wordsMap[word].forEach(date=>{
-const d=document.createElement("div");
-d.textContent=date;
 
+dictionary[word].forEach(date=>{
+let d=document.createElement("div");
+d.textContent=date;
 d.onclick=()=>openDiary(date);
 dateList.appendChild(d);
 });
 };
 
-wordList.appendChild(span);
+wordList.appendChild(w);
+});
 });
 }
+
+/* 戻る */
+
+document.querySelectorAll(".backBtn").forEach(btn=>{
+btn.onclick=()=>showScreen("calendar");
+});
