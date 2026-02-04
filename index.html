@@ -11,34 +11,50 @@
 
 <div class="app">
 
-<header class="header">
-    <h1>English Diary</h1>
+<h1>English Diary</h1>
 
-    <div class="month-nav">
-        <button id="prevMonth">←</button>
-        <div id="monthLabel"></div>
-        <button id="nextMonth">→</button>
-    </div>
-</header>
+<!-- 月ナビ -->
+<div class="month-nav">
+<button id="prevMonth">←</button>
+<div id="monthLabel"></div>
+<button id="nextMonth">→</button>
+</div>
 
-<main>
+<!-- ===== カレンダー ===== -->
+<div id="calendarView">
+<div id="calendar"></div>
+<button id="goAnalyze">Analyze</button>
+</div>
 
-<section id="calendarView">
-    <div id="calendar"></div>
-</section>
+<!-- ===== 日記 ===== -->
+<div id="diaryView" class="hidden">
 
-<section id="diaryView">
-    <textarea id="diaryInput" placeholder="Write your diary in English..."></textarea>
+<h2 id="selectedDate"></h2>
 
-    <div class="actions">
-        <button id="saveBtn">Save</button>
-        <button id="analyzeBtn">Analyze</button>
-    </div>
+<select id="emotion">
+<option value="normal">Normal</option>
+<option value="happy">Happy</option>
+<option value="sad">Sad</option>
+<option value="tired">Tired</option>
+<option value="angry">Angry</option>
+<option value="excited">Excited</option>
+</select>
 
-    <div id="result"></div>
-</section>
+<textarea id="diaryInput"></textarea>
 
-</main>
+<div id="count"></div>
+
+<button id="saveBtn">Save</button>
+<button id="backCalendar">Back</button>
+
+</div>
+
+<!-- ===== Analyze ===== -->
+<div id="analyzeView" class="hidden">
+<h2>Word Analyze</h2>
+<div id="wordList"></div>
+<button id="backCalendar2">Back</button>
+</div>
 
 </div>
 
