@@ -6,60 +6,60 @@
 <title>English Diary</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h1>English Diary</h1>
+<div class="container">
 
-<!-- ① カレンダー画面 -->
-<div id="calendarScreen" class="screen">
+  <h1>English Diary</h1>
 
-<div class="calendar-nav">
-<button onclick="changeMonth(-1)">←</button>
-<span id="monthLabel"></span>
-<button onclick="changeMonth(1)">→</button>
-</div>
+  <!-- カレンダー画面 -->
+  <div id="calendarScreen" class="screen">
+    <div class="calendar-nav">
+      <button id="prevMonth">◀</button>
+      <span id="monthLabel"></span>
+      <button id="nextMonth">▶</button>
+    </div>
+    <div id="calendar"></div>
+    <div class="button-area">
+      <button id="analyzeBtn">Analyze</button>
+    </div>
+  </div>
 
-<div id="calendar"></div>
+  <!-- 日記画面 -->
+  <div id="diaryScreen" class="screen hidden">
+    <h2 id="diaryDate"></h2>
+    <div class="diary-card">
+      <textarea id="diaryText" placeholder="Write your diary in English..."></textarea>
+      <div class="counter-area">
+        <span id="counter">0 / 50</span>
+      </div>
+      <div class="emotion-area">
+        <label for="emotion">Today I feel: </label>
+        <select id="emotion">
+          <option value="">--Select--</option>
+          <option value="happy">Happy</option>
+          <option value="sad">Sad</option>
+          <option value="angry">Angry</option>
+          <option value="excited">Excited</option>
+          <option value="tired">Tired</option>
+          <option value="calm">Calm</option>
+        </select>
+      </div>
+      <div class="button-area">
+        <button id="saveBtn">Save</button>
+        <button id="backBtn">Back</button>
+      </div>
+    </div>
+  </div>
 
-<button class="analyzeBtn" onclick="openAnalyze()">Analyze</button>
-
-</div>
-
-<!-- ② 日記画面 -->
-<div id="diaryScreen" class="screen hidden">
-
-<h2 id="diaryDate"></h2>
-
-<select id="emotion">
-<option value="">Select feeling</option>
-<option value="happy">Happy</option>
-<option value="sad">Sad</option>
-<option value="excited">Excited</option>
-<option value="tired">Tired</option>
-<option value="angry">Angry</option>
-<option value="calm">Calm</option>
-</select>
-
-<textarea id="diaryText" placeholder="Write in English only..."></textarea>
-
-<div id="counter">0 / 50</div>
-
-<div class="btnRow">
-<button onclick="saveDiary()">Save</button>
-<button onclick="backCalendar()">Back</button>
-</div>
-
-</div>
-
-<!-- ③ Analyze画面 -->
-<div id="analyzeScreen" class="screen hidden">
-
-<h2>Word Analyze</h2>
-
-<div id="dictionary"></div>
-
-<button onclick="backCalendar()">Back</button>
+  <!-- アナライズ画面 -->
+  <div id="analyzeScreen" class="screen hidden">
+    <h2>Dictionary</h2>
+    <div id="dictionary"></div>
+    <div class="button-area">
+      <button id="backAnalyzeBtn">Back</button>
+    </div>
+  </div>
 
 </div>
 
