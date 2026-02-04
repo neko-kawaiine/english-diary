@@ -1,191 +1,175 @@
-const calendarDiv = document.getElementById("calendar");
-const monthTitle = document.getElementById("monthTitle");
-const diaryInput = document.getElementById("diaryInput");
-const charCount = document.getElementById("charCount");
-const moodSelect = document.getElementById("mood");
-const warning = document.getElementById("warning");
-
 let currentDate = new Date();
-let selectedDate = "";
+let selectedDate = null;
+let diaries = JSON.parse(localStorage.getItem("diaries") || "{}");
 
-const screens={
-calendar:calendarScreen,
-diary:diaryScreen,
-analyze:analyzeScreen
-};
-
-function showScreen(name){
-Object.values(screens).forEach(s=>s.classList.remove("active"));
-screens[name].classList.add("active");
+function showScreen(id){
+document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
 }
 
-/* カレンダー生成 */
+/* calendar */
 
-function createCalendar(){
-calendarDiv.innerHTML="";
+function renderCalendar(){
 
-let year=currentDate.getFullYear();
-let month=currentDate.getMonth();
+let year = currentDate.getFullYear();
+let month = currentDate.getMonth();
 
-monthTitle.textContent=`${year} / ${month+1}`;
+document.getElementById("monthLabel").textContent =
+`${year} / ${month+1}`;
 
-let lastDay=new Date(year,month+1,0).getDate();
+let firstDay = new Date(year,month,1).getDay();
+let lastDate = new Date(year,month+1,0).getDate();
 
-for(let i=1;i<=lastDay;i++){
+let cal = document.getElementById("calendar");
+cal.innerHTML="";
 
-let dateStr=`${year}-${String(month+1).padStart(2,"0")}-${String(i).padStart(2,"0")}`;
+for(let i=0;i<firstDay;i++){
+cal.innerHTML+="<div></div>";
+}
 
-let div=document.createElement("div");
-div.className="day";
-div.textContent=i;
+for(let d=1; d<=lastDate; d++){
 
-let data=JSON.parse(localStorage.getItem(dateStr)||"{}");
+let key = `${year}-${month+1}-${d}`;
+let emo = diaries[key]?.emotion || "";
 
-if(data.words>=50) div.classList.add("green");
-if(data.mood) div.classList.add(data.mood);
+let div = document.createElement("div");
+div.className = "day " + emo;
+div.textContent = d;
 
-div.onclick=()=>openDiary(dateStr);
+div.onclick = ()=> openDiary(key);
 
-calendarDiv.appendChild(div);
+cal.appendChild(div);
 }
 }
 
-createCalendar();
-
-/* 月移動 */
-
-prevMonth.onclick=()=>{
-currentDate.setMonth(currentDate.getMonth()-1);
-createCalendar();
-};
-
-nextMonth.onclick=()=>{
-currentDate.setMonth(currentDate.getMonth()+1);
-createCalendar();
-};
-
-/* 日記 */
-
-function openDiary(date){
-selectedDate=date;
-selectedDateText.textContent=date;
-
-let data=JSON.parse(localStorage.getItem(date)||"{}");
-
-diaryInput.value=data.text||"";
-moodSelect.value=data.mood||"";
-
-updateCount();
-
-showScreen("diary");
+function changeMonth(n){
+currentDate.setMonth(currentDate.getMonth()+n);
+renderCalendar();
 }
 
-diaryInput.addEventListener("input",updateCount);
+/* diary */
 
-function updateCount(){
+function openDiary(dateKey){
+selectedDate = dateKey;
+showScreen("diaryScreen");
 
-let words=diaryInput.value.trim().split(/\s+/).filter(Boolean);
-charCount.textContent=words.length;
+document.getElementById("diaryDate").textContent = dateKey;
 
-if(/[ぁ-んァ-ン一-龥]/.test(diaryInput.value)){
-warning.textContent="日本語禁止";
-saveBtn.disabled=true;
+let data = diaries[dateKey] || {};
+document.getElementById("diaryText").value = data.text || "";
+document.getElementById("emotion").value = data.emotion || "";
+
+updateCounter();
+}
+
+function updateCounter(){
+let text = document.getElementById("diaryText").value;
+let count = text.length;
+
+document.getElementById("counter").textContent = `${count} / 50`;
+
+if(count>=50){
+document.getElementById("diaryText").classList.add("goal");
 }else{
-warning.textContent="";
-saveBtn.disabled=false;
-}
-
-if(words.length>=50){
-diaryInput.style.background="#dcfce7";
-}else{
-diaryInput.style.background="white";
+document.getElementById("diaryText").classList.remove("goal");
 }
 }
 
-/* 保存 */
+document.getElementById("diaryText").addEventListener("input",updateCounter);
 
-saveBtn.onclick=()=>{
+function containsJapanese(str){
+return /[ぁ-んァ-ン一-龯]/.test(str);
+}
 
-let words=diaryInput.value.trim().split(/\s+/).filter(Boolean);
+function saveDiary(){
 
-localStorage.setItem(selectedDate,JSON.stringify({
-text:diaryInput.value,
-words:words.length,
-mood:moodSelect.value
-}));
+let text = document.getElementById("diaryText").value;
 
-createCalendar();
-alert("Saved");
-};
+if(containsJapanese(text)){
+alert("English only!");
+return;
+}
 
-/* Analyze */
+let emo = document.getElementById("emotion").value;
 
-analyzeBtn.onclick=()=>{
-generateAnalysis();
-showScreen("analyze");
-};
+diaries[selectedDate] = {text, emotion:emo};
+localStorage.setItem("diaries",JSON.stringify(diaries));
 
-function generateAnalysis(){
+backCalendar();
+renderCalendar();
+}
 
-wordList.innerHTML="";
-dateList.innerHTML="";
+function backCalendar(){
+showScreen("calendarScreen");
+}
 
-let dictionary={};
+/* analyze */
 
-Object.keys(localStorage).forEach(date=>{
-let data=JSON.parse(localStorage.getItem(date));
+function openAnalyze(){
+showScreen("analyzeScreen");
+buildDictionary();
+}
 
-if(!data.text) return;
+function buildDictionary(){
 
-let words=data.text.toLowerCase().split(/\s+/);
+let dict = {};
+
+for(let date in diaries){
+
+let words = diaries[date].text
+.toLowerCase()
+.match(/[a-z]+/g);
+
+if(!words) continue;
 
 words.forEach(w=>{
-if(!dictionary[w]) dictionary[w]=[];
-dictionary[w].push(date);
-});
-});
-
-/* A-Z構造 */
-
-let grouped={};
-
-Object.keys(dictionary).forEach(word=>{
-let first=word[0].toUpperCase();
-
-if(!grouped[first]) grouped[first]=[];
-grouped[first].push(word);
-});
-
-Object.keys(grouped).sort().forEach(letter=>{
-
-let h=document.createElement("h3");
-h.textContent=letter;
-wordList.appendChild(h);
-
-grouped[letter].sort().forEach(word=>{
-
-let w=document.createElement("span");
-w.textContent=word;
-w.className="word";
-
-w.onclick=()=>{
-dateList.innerHTML="";
-
-dictionary[word].forEach(date=>{
-let d=document.createElement("div");
-d.textContent=date;
-d.onclick=()=>openDiary(date);
-dateList.appendChild(d);
-});
-};
-
-wordList.appendChild(w);
-});
+if(!dict[w]) dict[w]=[];
+dict[w].push(date);
 });
 }
 
-/* 戻る */
+let container = document.getElementById("dictionary");
+container.innerHTML="";
 
-document.querySelectorAll(".backBtn").forEach(btn=>{
-btn.onclick=()=>showScreen("calendar");
+let grouped = {};
+
+Object.keys(dict).sort().forEach(word=>{
+let letter = word[0].toUpperCase();
+if(!grouped[letter]) grouped[letter]=[];
+grouped[letter].push(word);
 });
+
+for(let letter in grouped){
+
+let letterDiv = document.createElement("div");
+letterDiv.className="letter";
+letterDiv.textContent = letter;
+container.appendChild(letterDiv);
+
+grouped[letter].forEach(word=>{
+
+let w = document.createElement("div");
+w.className="word";
+w.textContent = word;
+
+w.onclick = ()=> showDates(word, dict[word]);
+
+container.appendChild(w);
+
+});
+}
+}
+
+function showDates(word, dates){
+
+let list = dates.join("\n");
+
+let choose = prompt(`"${word}" used on:\n${list}\nEnter date:`);
+
+if(choose && diaries[choose]){
+openDiary(choose);
+}
+}
+
+/* start */
+renderCalendar();
