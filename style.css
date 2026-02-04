@@ -1,14 +1,9 @@
-/* 共通 */
 body {
   font-family: "Segoe UI", sans-serif;
-  background: #f2f2f2;
+  background: #f9f9f9;
   margin:0; padding:0;
 }
-.container {
-  max-width: 700px;
-  margin: 20px auto;
-  text-align: center;
-}
+.container { max-width: 700px; margin: 20px auto; text-align: center; }
 h1 { margin-bottom: 15px; color: #333; }
 .screen.hidden { display: none; }
 
@@ -21,14 +16,10 @@ h1 { margin-bottom: 15px; color: #333; }
   margin-bottom: 10px;
 }
 .calendar-nav button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #555;
-  color: #fff;
-  font-weight: bold;
+  padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;
+  background: #555; color: #fff; font-weight: bold;
 }
+.calendar-nav button:hover { background: #333; }
 #calendar {
   display: grid;
   grid-template-columns: repeat(7, 50px);
@@ -36,36 +27,28 @@ h1 { margin-bottom: 15px; color: #333; }
   justify-content: center;
 }
 .day {
-  width: 50px; height: 50px;
-  display: flex; justify-content: center; align-items: center;
-  border-radius: 50%;
-  background: #fff;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  transition: 0.2s;
+  width: 50px; height: 50px; display: flex; justify-content:center; align-items:center;
+  border-radius:50%; background:#fff; cursor:pointer; border:1px solid #ccc; transition:0.2s;
 }
 .day:hover { background: #e0e0e0; }
-
-/* 感情別カラー */
-.day.happy { background: #ffe066; }
-.day.sad { background: #74c0fc; }
-.day.angry { background: #ff6b6b; }
-.day.excited { background: #ff922b; }
-.day.tired { background: #adb5bd; }
-.day.calm { background: #63e6be; }
+/* 感情カラー */
+.day.happy { background:#ffe066; }
+.day.sad { background:#74c0fc; }
+.day.angry { background:#ff6b6b; }
+.day.excited { background:#ff922b; }
+.day.tired { background:#adb5bd; }
+.day.calm { background:#63e6be; }
 
 /* ボタンエリア */
-.button-area { margin-top: 10px; display: flex; justify-content: center; gap: 10px; }
-.button-area button { padding: 8px 14px; border-radius: 6px; border:none; cursor:pointer; background:#555; color:white; }
+.button-area { margin-top:10px; display:flex; justify-content:center; gap:10px; }
+.button-area button { padding:8px 14px; border-radius:6px; border:none; cursor:pointer; background:#555; color:white; }
 .button-area button:hover { background:#333; }
 
 /* 日記画面 */
-.diary-card { background:#fff; padding:15px; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); margin-top:10px; }
+.diary-card { background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.15); margin-top:10px; }
 textarea { width:100%; height:120px; border-radius:8px; border:1px solid #ccc; padding:8px; font-size:14px; resize:none; }
 textarea.goal { background:#d3f9d8; }
 .counter-area { text-align:right; margin-top:5px; font-weight:bold; }
-
-/* emotion */
 .emotion-area { margin:8px 0; }
 
 /* アナライズ */
@@ -73,5 +56,6 @@ textarea.goal { background:#d3f9d8; }
 .letter { font-weight:bold; margin-top:10px; }
 .word { margin-left:10px; cursor:pointer; padding:2px; }
 .word:hover { background:#f0f0f0; border-radius:4px; }
-#dictionary button { margin:2px; padding:2px 5px; font-size:12px; border-radius:4px; border:none; cursor:pointer; background:#555; color:white; }
-#dictionary button:hover { background:#333; }
+.dates { margin-left:20px; margin-top:3px; display:none; }
+.dates button { margin:2px; padding:2px 5px; font-size:12px; border-radius:4px; border:none; cursor:pointer; background:#555; color:white; }
+.dates button:hover { background:#333; }
