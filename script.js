@@ -1,71 +1,148 @@
+let date = new Date();
+let selected = null;
+let diaryData = JSON.parse(localStorage.getItem("diary") || "{}");
+
 const calendar = document.getElementById("calendar");
 const monthLabel = document.getElementById("monthLabel");
-const diaryInput = document.getElementById("diaryInput");
-const result = document.getElementById("result");
 
-let currentDate = new Date();
-let selectedDate = null;
+function renderCalendar(){
 
-/* カレンダー生成 */
-function generateCalendar(date) {
+calendar.innerHTML="";
+let y = date.getFullYear();
+let m = date.getMonth();
 
-    calendar.innerHTML = "";
+monthLabel.textContent = `${y} / ${m+1}`;
 
-    const year = date.getFullYear();
-    const month = date.getMonth();
+let first = new Date(y,m,1).getDay();
+let last = new Date(y,m+1,0).getDate();
 
-    monthLabel.textContent = `${year} / ${month + 1}`;
-
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
-
-    for (let i = 0; i < firstDay; i++) {
-        calendar.appendChild(document.createElement("div"));
-    }
-
-    for (let day = 1; day <= lastDate; day++) {
-
-        const div = document.createElement("div");
-        div.textContent = day;
-        div.classList.add("day");
-
-        div.onclick = () => {
-            selectedDate = `${year}-${month + 1}-${day}`;
-            diaryInput.value = localStorage.getItem(selectedDate) || "";
-        };
-
-        calendar.appendChild(div);
-    }
+for(let i=0;i<first;i++){
+calendar.innerHTML += "<div></div>";
 }
 
-/* 保存 */
-document.getElementById("saveBtn").onclick = () => {
+for(let d=1; d<=last; d++){
 
-    if (!selectedDate) return alert("日付を選んでください");
+let key = `${y}-${m+1}-${d}`;
 
-    localStorage.setItem(selectedDate, diaryInput.value);
-    alert("Saved!");
+let div = document.createElement("div");
+div.className="day";
+div.textContent=d;
+
+if(diaryData[key]){
+div.style.background = emotionColor(diaryData[key].emotion);
+}
+
+div.onclick = ()=> openDiary(key);
+calendar.appendChild(div);
+}
+}
+
+function emotionColor(e){
+return {
+happy:"#ffe082",
+sad:"#90caf9",
+tired:"#b0bec5",
+angry:"#ef9a9a",
+excited:"#a5d6a7",
+normal:"white"
+}[e];
+}
+
+function openDiary(key){
+selected = key;
+
+document.getElementById("calendarView").classList.add("hidden");
+document.getElementById("diaryView").classList.remove("hidden");
+
+document.getElementById("selectedDate").textContent=key;
+
+let data = diaryData[key] || {text:"",emotion:"normal"};
+
+diaryInput.value=data.text;
+emotion.value=data.emotion;
+
+updateCount();
+}
+
+saveBtn.onclick=()=>{
+let text = diaryInput.value;
+
+if(/[ぁ-んァ-ン一-龥]/.test(text)){
+alert("English only!");
+return;
+}
+
+diaryData[selected]={
+text,
+emotion:emotion.value
 };
 
-/* 分析（超簡易版） */
-document.getElementById("analyzeBtn").onclick = () => {
+localStorage.setItem("diary",JSON.stringify(diaryData));
+renderCalendar();
+alert("Saved!");
+}
 
-    const text = diaryInput.value;
+diaryInput.oninput=updateCount;
 
-    const wordCount = text.split(/\s+/).filter(w => w).length;
+function updateCount(){
+let c = diaryInput.value.split(/\s+/).filter(Boolean).length;
+count.textContent = `Words: ${c} / 50`;
 
-    result.textContent = `Word count: ${wordCount}`;
-};
+if(c>=50){
+diaryInput.classList.add("goal");
+}else{
+diaryInput.classList.remove("goal");
+}
+}
 
-/* 月移動 */
-document.getElementById("prevMonth").onclick = () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    generateCalendar(currentDate);
-};
+backCalendar.onclick=()=>{
+diaryView.classList.add("hidden");
+calendarView.classList.remove("hidden");
+}
 
-document.getElementById("nextMonth").onclick = () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    generateCalendar(currentDate);
-};
+prevMonth.onclick=()=>{
+date.setMonth(date.getMonth()-1);
+renderCalendar();
+}
 
-generateCalendar(currentDate);
+nextMonth.onclick=()=>{
+date.setMonth(date.getMonth()+1);
+renderCalendar();
+}
+
+goAnalyze.onclick=showAnalyze;
+backCalendar2.onclick=()=>{
+analyzeView.classList.add("hidden");
+calendarView.classList.remove("hidden");
+}
+
+function showAnalyze(){
+calendarView.classList.add("hidden");
+analyzeView.classList.remove("hidden");
+
+let words={};
+
+for(let k in diaryData){
+let arr = diaryData[k].text.toLowerCase().match(/[a-z']+/g) || [];
+arr.forEach(w=>{
+if(!words[w]) words[w]=[];
+words[w].push(k);
+});
+}
+
+wordList.innerHTML="";
+
+Object.keys(words).sort().forEach(w=>{
+let div=document.createElement("div");
+div.textContent=`${w} (${words[w].length})`;
+
+div.onclick=()=>{
+let dates=words[w].join(", ");
+alert(`${w} used on:\n${dates}`);
+}
+
+wordList.appendChild(div);
+});
+}
+
+renderCalendar();
